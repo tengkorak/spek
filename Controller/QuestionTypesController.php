@@ -19,12 +19,12 @@ class QuestionTypesController extends AppController {
 	}
 
 /**
- * view method
+ * jsu method
  *
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
+	public function jsu($id = null) {
 
 		$this->QuestionType->Behaviors->load('Containable');
 		
@@ -37,7 +37,8 @@ class QuestionTypesController extends AppController {
 							 'QuestionType.*, Content.description'
 								),
         	'conditions' => array(
-        						'QuestionType.course_id' => $id
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 1
         						),
   	     	'order' => array(
         					'QuestionType.content_id ASC'
@@ -50,7 +51,8 @@ class QuestionTypesController extends AppController {
 							 'content_id, COUNT(*) c'
 								),
         	'conditions' => array(
-        						'QuestionType.course_id' => $id
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 1
         						),
         	'group' => 'QuestionType.content_id',
   	     	'order' => array(
@@ -64,35 +66,117 @@ class QuestionTypesController extends AppController {
 		$this->layout = 'main';
 	}
 
+
+	public function jsub($id = null) {
+
+		$this->QuestionType->Behaviors->load('Containable');
+		
+    	$questionTypes = $this->QuestionType->find('all', array(
+			'contain' => array('Content' => array('Slt',
+												  'Outcome' => array('Po')
+												  )
+							   ),
+			'fields' => array(
+							 'QuestionType.*, Content.description'
+								),
+        	'conditions' => array(
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 2
+        						),
+  	     	'order' => array(
+        					'QuestionType.content_id ASC'
+        					)
+
+        	));
+
+    	$occurences = $this->QuestionType->find('all', array(
+			'fields' => array(
+							 'content_id, COUNT(*) c'
+								),
+        	'conditions' => array(
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 2
+        						),
+        	'group' => 'QuestionType.content_id',
+  	     	'order' => array(
+        					'QuestionType.content_id ASC'
+        					)
+
+        	));
+
+		$this->set(compact('questionTypes','occurences'));
+		$this->set('title_for_layout', 'View JSU');        
+		$this->layout = 'main';
+	}
+
+	public function jsup($id = null) {
+
+		$this->QuestionType->Behaviors->load('Containable');
+		
+    	$questionTypes = $this->QuestionType->find('all', array(
+			'contain' => array('Content' => array('Slt',
+												  'Outcome' => array('Po')
+												  )
+							   ),
+			'fields' => array(
+							 'QuestionType.*, Content.description'
+								),
+        	'conditions' => array(
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 3
+        						),
+  	     	'order' => array(
+        					'QuestionType.content_id ASC'
+        					)
+
+        	));
+
+    	$occurences = $this->QuestionType->find('all', array(
+			'fields' => array(
+							 'content_id, COUNT(*) c'
+								),
+        	'conditions' => array(
+        						'QuestionType.course_id' => $id,
+        						'QuestionType.jsu' => 3
+        						),
+        	'group' => 'QuestionType.content_id',
+  	     	'order' => array(
+        					'QuestionType.content_id ASC'
+        					)
+
+        	));
+
+		$this->set(compact('questionTypes','occurences'));
+		$this->set('title_for_layout', 'View JSU');        
+		$this->layout = 'main';
+	}	
 /**
  * add method
  *
  * @return void
  */
-	public function add($id = null) {
+	public function add($id = null, $jsu = null) {
 		if ($this->request->is('post')) {
+
+			$this->request->data['QuestionType']['jsu'] = $jsu;
+
 			$this->QuestionType->create();
 			if ($this->QuestionType->save($this->request->data)) {
 				$this->Session->setFlash(__('The question type has been saved'),'message');
-				$this->redirect(array('action' => 'view',$id));
+
+				if($jsu == 1)
+					$view = 'jsu';
+				else if($jsu == 2)
+					$view = 'jsub';
+				else if($jsu == 3)
+					$view = 'jsup';
+
+				$this->redirect(array('action' => $view,$id));
 			} else {
 				$this->Session->setFlash(__('The question type could not be saved. Please, try again.'));
 			}
 		}
 
-/*
-				'conditions' => array('Course.user_id' => $this->Auth->user('id')),
-				'fields' => array(
-								'DISTINCT Program.id, Program.name_be, Program.name_bm '
-								),			
-				'joins' => array(
-						array(
-							'alias' => 'Course',
-							'table' => 'courses',
-							'type' => 'INNER',
-							'conditions' => 'Program.id = Course.program_id'
-						)
-*/
 		$this->QuestionType->Content->recursive = 0;
 
     	$contents = $this->QuestionType->Content->find('list', array(
@@ -106,52 +190,7 @@ class QuestionTypesController extends AppController {
         						)
     		));
 
-/*
-		$contents = $this->QuestionType->Content->find('list', array(
-        	'fields' => array(
-        					'Content.id',
-        					'Content.description'
-        					),
-        	'conditions' => array(
-        						'Content.course_id' => $id
-        						))
-			);
-*/
-
-/*
-		$pos = $this->QuestionType->Po->find('list', array(
-        	'fields' => array(
-        					'Po.id',
-        					'Content.description'
-        					),
-        	'joins' => array(
-        					array(
-        						'alias'=>'Program',
-        						'table'=>'programs',
-        						'type'=>'INNER',
-        						'conditions'=>'Po.program_id = '
-        						)),
-        	'conditions' => array(
-        						'Content.course_id' => $id
-        						))
-			);
-*/
-
-/*
-		$outcomes = $this->QuestionType->Outcome->find('list', array(
-        	'fields' => array(
-        					'Outcome.id',
-        					'Outcome.description'
-        					),
-        	'conditions' => array(
-        						'Outcome.course_id' => $id
-        						))
-			);
-
-		$slts = $this->QuestionType->Slt->find('list');
-*/
-
-		$this->set(compact('contents')); //,'outcomes','slts'));
+		$this->set(compact('contents'));
 		$this->set('title_for_layout', 'Add New Student Learning Time (SLT)');        
 		$this->layout = 'main';
 	}

@@ -63,13 +63,13 @@ li:hover li {
 			<a href="#"> JSU </a>
 				<ul>
 				<li class="button" id="toolbar-jsus">	
-				<?php echo $this->Html->link(__(' JSU '), array('controller' => 'questionTypes', 'action' => 'view', $course['Course']['id'])); ?>
+				<?php echo $this->Html->link(__(' JSU '), array('controller' => 'questionTypes', 'action' => 'jsu', $course['Course']['id'])); ?>
 				</li>
 				<li class="button" id="toolbar-jsub">	
-				<?php echo $this->Html->link(__(' JSUB '), array('controller' => 'questionTypes', 'action' => 'view', $course['Course']['id'])); ?>
+				<?php echo $this->Html->link(__(' JSUB '), array('controller' => 'questionTypes', 'action' => 'jsub', $course['Course']['id'])); ?>
 				</li>
 				<li class="button" id="toolbar-jsup">	
-				<?php echo $this->Html->link(__(' JSUP '), array('controller' => 'questionTypes', 'action' => 'view', $course['Course']['id'])); ?>
+				<?php echo $this->Html->link(__(' JSUP '), array('controller' => 'questionTypes', 'action' => 'jsup', $course['Course']['id'])); ?>
 				</li>				
 				</ul>
 			</li>

@@ -7,9 +7,17 @@
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
-			<?php echo $this->Html->link(__('Back'), array(
+			<?php 
+			if($this->passedArgs[1] == 1)
+				$view = 'jsu';
+			else if($this->passedArgs[1] == 2)
+				$view = 'jsub';
+			else if($this->passedArgs[1] == 3)
+				$view = 'jsup';				
+
+			echo $this->Html->link(__('Back'), array(
 															'controller' => 'questionTypes', 
-															'action' => 'view', 
+															'action' => $view, 
 															$this->passedArgs[0])); ?>
 			</li>
 
