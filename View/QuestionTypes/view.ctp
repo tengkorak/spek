@@ -1,5 +1,5 @@
 <?php
-debug($occurences);
+// debug($occurences);
 ?>
 
 <div id="mc-title">
@@ -71,6 +71,7 @@ debug($occurences);
 	<?php
 		$all_slt = 0;
 		$total_marks = 0;
+		$current_content_id = 0;
 
 		foreach($questionTypes as $questionType):	
 			foreach($questionType['Content']['Slt'] as $slt):
@@ -83,25 +84,34 @@ debug($occurences);
 
 		foreach($questionTypes as $questionType): 	
 			$total_slt = 0;
-			$current_content_id = $questionType['Content']['id'];
-	?>
-	<tr>
-		<td> <?php echo $questionType['Content']['description']; ?> </td>
 
-		<?php
+		    foreach($occurences as $index => $occurence) {
+        		if($occurence['QuestionType']['content_id'] == $questionType['Content']['id'])
+        		 $current = $index;
+    		}
+
+        	$row = $occurences[$current]['0']['c'];
+	
+			echo "<tr>";
+			
+			if($current_content_id != $questionType['Content']['id']) {
+			?>	
+			<td rowspan=<?php echo $row;?> > <?php echo $questionType['Content']['description']; ?> </td>
+			<?php
 			foreach($questionType['Content']['Outcome'] as $content):
-				echo "<td>";
+				echo "<td rowspan=" . $row. ">";
 				foreach($content['Po'] as $po):
 						echo $po['description'] . "<br><br>";
 				endforeach;				
 				echo "</td>";
 			endforeach;
 
-			echo "<td>";				
+			echo "<td rowspan=" . $row . ">";				
 			foreach($questionType['Content']['Outcome'] as $content):
 				echo $content['description'] . "<br><br>";
 			endforeach;
 			echo "</td>";
+			}
 
 			echo "<td>";				
 				echo $questionType['QuestionType']['type'];
@@ -144,6 +154,7 @@ debug($occurences);
 		?>		
 	</tr>
 	<?php
+	$current_content_id = $questionType['Content']['id'];
 	endforeach;
 	?>
 </tbody>
