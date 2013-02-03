@@ -1,0 +1,10 @@
+# Prevent sensitive data from ending up in your repo
+/Config/database.php
+/Config/core.php
+ 
+# prevent temporary files from ending up in our repo
+/tmp/cache/persistent/cake_*
+/tmp/logs/*.log
+
+# prevent examples from TCPDF ending up in repo
+/Vendor/tcpdf/examples/
