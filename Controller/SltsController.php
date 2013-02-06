@@ -131,7 +131,7 @@ class SltsController extends AppController {
 			throw new NotFoundException(__('Invalid slt'));
 		}
 		if ($this->Slt->delete()) {
-			$this->Session->setFlash(__('Slt deleted'));
+			$this->Session->setFlash(__('Slt deleted'),'Message');
 			$this->redirect(array('action' => 'view',$this->request->data['Slt']['course_id']));			
 		}
 		$this->Session->setFlash(__('Slt was not deleted'));
