@@ -1,3 +1,11 @@
+<style type="text/css">
+#navlist li
+{
+display: inline;
+padding-right: 20px;
+}
+</style>
+
 <div id="mc-title">
 	<h1>Add <?php echo $this->params['controller']; ?></h1>												
 	<div class="mc-toolbar" id="toolbar">
@@ -21,6 +29,7 @@
 
 <div id="mc-component">
 	<div class="mc-clr"></div>
+
 
 	<?php echo $this->Form->create('Po');?>
 	<fieldset class="adminform">
@@ -61,65 +70,152 @@
 		LO3 - Thinking and Scientific Skills
 	</li>
 	<li>
+		<ul class="hidden hidden_PoLo3" id="navlist" style="padding-left: 40px">
+		<li>
+			Critical Thinking and Problem Solving (CTPS) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3,4,5,6,7);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['ctps']);
+				echo $this->Form->radio('ctps',$options,$attributes);
+		?>
+		</li></ul>
+	</li>	
+	<li>
 		<?php echo $this->Form->checkbox('lo4'); ?>
 		LO4 - Communication Skills
+	</li>
+	<li>
+		<ul class="hidden hidden_PoLo4" id="navlist" style="padding-left: 40px">
+		<li>
+			Communication Skills (CS) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3,4,5,6,7,8);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['cs']);
+				echo $this->Form->radio('cs',$options,$attributes);
+		?>
+		</li></ul>
 	</li>
 	<li>
 		<?php echo $this->Form->checkbox('lo5'); ?>
 		LO5 - Social Skills, Teamwork and Responsibilities
 	</li>
 	<li>
+		<ul class="hidden hidden_PoLo5" id="navlist" style="padding-left: 40px">
+		<li>
+			Teamwork Skills (TS) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3,4,5);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['ts']);
+				echo $this->Form->radio('ts',$options,$attributes);
+		?>
+		</li></ul>
+	</li>
+	<li>
 		<?php echo $this->Form->checkbox('lo6'); ?>
 		LO6 - Values, Ethics, Moral and Professionalism
 	</li>
+	<li>
+		<ul class="hidden hidden_PoLo6" id="navlist" style="padding-left: 40px">
+		<li>
+			Ethics and Moral Professionalisme (EM) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['em']);
+				echo $this->Form->radio('em',$options,$attributes);
+		?>
+		</li></ul>
+	</li>	
 	<li>
 		<?php echo $this->Form->checkbox('lo7'); ?>
 		LO7 - Information Management and Lifelong Learning
 	</li>
 	<li>
+		<ul class="hidden hidden_PoLo7" id="navlist" style="padding-left: 40px">
+		<li>
+			Life-long Learning and Information Management (LL) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['ll']);
+				echo $this->Form->radio('ll',$options,$attributes);
+		?>
+		</li></ul>
+	</li>	
+	<li>
 		<?php echo $this->Form->checkbox('lo8'); ?>
 		LO8 - Management and Entrepreneurship
 	</li>
 	<li>
+		<ul class="hidden hidden_PoLo8" id="navlist" style="padding-left: 40px">
+		<li>
+			Entrepreneurial Skills (ES) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3,4);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['es']);
+				echo $this->Form->radio('es',$options,$attributes);
+		?>
+		</li></ul>
+	</li>	
+	<li>
 		<?php echo $this->Form->checkbox('lo9'); ?>
 		LO9 - Leadership Skills
 	</li>
+	<li>
+		<ul class="hidden hidden_PoLo9" id="navlist" style="padding-left: 40px">
+		<li>
+			Leadersgip Skills (LS) <br>
+			<strong> Level </strong><br>
+		<?php
+			    $options=array(1,2,3,4);
+				$attributes=array('legend'=>false, 
+								  'separator'=>'</li><li>',
+								  'label' => false,
+								  'checked' => $data['Po']['ls']);
+				echo $this->Form->radio('ls',$options,$attributes);
+		?>
+		</li></ul>
+	</li>	
 	</ul>
-	
-	<h3> Please choose a respective MOHE Soft Skills (KI): </h3>
-	<ul class="adminformlist">
-	<li>
-		<?php echo $this->Form->checkbox('ss1'); ?>
-		SS1 - Critical Thinking and Problem Solving Skill
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss2'); ?>
-		SS2 - Communication Skills
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss3'); ?>
-		SS3 - Teamwork Skills
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss4'); ?>
-		SS4 - Ethics and Moral Professionalism
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss5'); ?>
-		SS5 - Life-long Learning and Information Management
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss6'); ?>
-		SS6 - Entrepreneurial Skills
-	</li>
-	<li>
-		<?php echo $this->Form->checkbox('ss7'); ?>
-		SS7 - Leadership Skills
-	</li>
-	</ul>
-
 	</fieldset>
 	</form>
 </div>
 <br />
+<script type="text/javascript">
+$('.hidden').css({
+    'display': 'none'
+});
+
+$(':checkbox').change(function() {
+    var option = 'hidden_' + $(this).attr('id');
+    if ($('.' + option).css('display') == 'none') {
+        $('.' + option).fadeIn();
+    }
+    else {
+        $('.' + option).fadeOut();
+    }
+});
+</script>
 
