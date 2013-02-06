@@ -1,3 +1,45 @@
+<!--[if IE]>
+   <style>
+      .rotate_text
+      {
+         writing-mode: tb-rl;
+         filter: flipH() flipV();
+      }
+   </style>
+<![endif]-->
+<!--[if !IE]><!-->
+   <style>
+      .rotate_text
+      {
+         -moz-transform:rotate(-90deg); 
+         -moz-transform-origin: top left;
+         -webkit-transform: rotate(-90deg);
+         -webkit-transform-origin: top left;
+         -o-transform: rotate(-90deg);
+         -o-transform-origin:  top left;
+          position:relative;
+         top:20px;
+      }
+   </style>
+<!--<![endif]-->
+
+   <style>  
+      table
+      {
+         table-layout: fixed;
+         width: 69px; /*Table width must be set or it wont resize the cells*/
+      }
+      th, td 
+      {
+          width: 23px;
+      }
+      .rotated_cell
+      {
+         height:300px;
+         vertical-align:bottom
+      }
+   </style>
+
 <div id="mc-title">
 	<h1>PO-PEO Matrix</h1>												
 	<div class="mc-toolbar" id="toolbar">
@@ -33,7 +75,7 @@ $size = count($peos);
 	<tr>
 		<?php 
 			foreach($peos as $peo) {
-				echo '<td><div class="v">' . $peo . '</div></td>';
+				echo '<td class="rotated_cell"><div class="rotate_text">' . $peo . '</div></td>';
 			}
 		?>
 	</tr>
