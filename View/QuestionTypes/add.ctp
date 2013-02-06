@@ -72,11 +72,9 @@
 		echo '<tr>';
 		echo '<td><br><strong> Cognitive </strong><br></td>';
 		echo '<td>';
-
 	        $options=array(1,2,3,4,5,6);
 			$attributes=array('legend'=>false, 'separator'=>' ');
 			echo $this->Form->radio('cognitive',$options,$attributes);
-	
 	    echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
