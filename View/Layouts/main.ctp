@@ -60,12 +60,60 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 				<img src="/uhek/img/logo.png" alt="logo" class="mc-logo" width="40" height="40" />						
 				<h1>SPeK Administrator</h1>
 			</div>
-					
+
 			<div id="mc-nav">
 					<ul id="mctrl-menu" class="menutop level1">
 					<li class="li-dashboard dashboard root">
-							<a class="dashboard item" href="/uhek/programs/"> Dashboard </a>
-					<li>
+							<a class="dashboard item" href="/uhek/programs/"> Home </a>
+					</li>
+					<?php
+						if ($this->Session->read('Auth.User')){
+							if($this->Session->read('Auth.User.group_id') == 1)
+							{
+					?>
+					<li class="li-users parent root">
+						<span class=" daddy item"><span>Users</span></span>
+						<ul class="level2 parent-users">
+							<li class="li-user-manager class:user parent">
+								<a class="class:user daddy item" href="/uhek/users/"> Manage Users
+								</a>
+									<ul class="level3 parent-user-manager">
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/users/add"> Add New User</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="li-users parent root">
+						<span class=" daddy item"><span>Programs</span></span>
+						<ul class="level2 parent-users">
+							<li class="li-user-manager class:user parent">
+								<a class="class:user daddy item" href="/uhek/programs/"> Manage Programs
+								</a>
+									<ul class="level3 parent-user-manager">
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/programs/add"> Add New Program </a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="li-users parent root">
+						<span class=" daddy item"><span> Courses </span></span>
+						<ul class="level2 parent-users">
+							<li class="li-user-manager class:user parent">
+								<a class="class:user daddy item" href="/uhek/courses/"> Manage Courses 
+								</a>
+									<ul class="level3 parent-user-manager">
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/courses/add"> Add New Course </a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>										
+					<?php
+						}
+					}
+					?>
 				</ul>
 			</div>
 
