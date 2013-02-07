@@ -1,9 +1,21 @@
+<?php
+debug($programs);
+?>
+
 <div id="mc-title">
 	<h1>Add <?php echo $this->params['controller']; ?></h1>												
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
-			<?php echo $this->Html->link(__('Back'), array('controller' => 'programs', 'action' => 'view', $this->params['url']['program_id'])); ?>		</li>
+
+			<?php 
+			if($this->params['url']['program_id']) {
+				echo $this->Html->link(__('Back'), array('controller' => 'programs', 'action' => 'view', $this->params['url']['program_id'])); 
+			} else {
+				echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'index')); 
+			}
+			?>		
+			</li>
 
 			<li class="button special" id="toolbar-new">
 			<a href="#" onClick="JavaScript:document.forms.CourseAddForm.submit()" class="toolbar">
@@ -111,6 +123,12 @@
 		echo "<li>";
 		echo $this->Form->input('level_id');
 		echo "</li>";
+
+		if( !$this->params['url']['program_id']) {
+			echo "<li>";
+			echo $this->Form->input('program_id');
+			echo "</li>";
+		}
 	?>
 	</ul>
 	</fieldset>
