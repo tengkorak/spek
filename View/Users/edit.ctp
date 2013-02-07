@@ -1,21 +1,44 @@
-<div class="users form">
-<?php echo $this->Form->create('User');?>
-	<fieldset>
-		<legend><?php echo __('Edit User'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('username');
-		echo $this->Form->input('password');
-		echo $this->Form->input('role');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit'));?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+<div id="mc-title">
+	<h1>Edit User</h1>												
+	<div class="mc-toolbar" id="toolbar">
+		<ul>
+			<li class="button" id="toolbar-back">
+			<?php echo $this->Html->link(__('Back'), array('controller' => 'users', 'action' => 'index'));
+			 ?>		
+			</li>
+			<li class="button special" id="toolbar-add">
+			<a href="#" onClick="JavaScript:document.forms.UserEditForm.submit()" class="toolbar">
+			Save
+			</a>
+			</li>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('User.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index'));?></li>
-	</ul>
+			<li class="divider">
+			</li>
+		</ul>
+	</div>						
+
+	<div class="mc-clr"></div>
 </div>
+
+<div id="mc-component">
+	<div class="mc-clr"></div>
+
+<?php echo $this->Form->create('User');?>
+<fieldset class="adminform">
+<ul class="adminformlist">	
+	<?php
+		echo "<li>";
+		echo $this->Form->input('fullname');	
+		echo "</li>\n";
+		echo "<li>";		
+		echo $this->Form->input('password');
+		echo "</li>\n";
+		echo "<li>";		
+		echo $this->Form->input('group_id');
+		echo "</li>\n";
+	?>
+	</ul>
+	</fieldset>
+	</form>
+</div>
+<br />
