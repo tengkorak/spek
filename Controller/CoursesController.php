@@ -23,6 +23,9 @@ public $helpers = array('Js');
 	public function index() {
 		$this->Course->recursive = 0;
 		$this->set('courses', $this->paginate());
+
+		$this->set('title_for_layout', 'List Course');        
+		$this->layout = 'main';	    			
 	}
 
 	public function copo($id = null) {
@@ -138,9 +141,16 @@ public $helpers = array('Js');
 			$this->Course->create();
 			if ($this->Course->save($this->request->data)) {
 				$this->Session->setFlash(__('The course has been saved'),'Manage');
-				$this->redirect(array('controller' => 'programs', 
+
+				if( $this->request->data['Course']['program_id'] != '') {
+					$this->redirect(array('controller' => 'programs', 
 									  'action' => 'view',
 									  $this->request->data['Course']['program_id']));
+				}
+				else {
+					$this->redirect(array('controller' => 'courses', 
+									  'action' => 'index'));					
+				}
 			} else {
 				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
 			}
