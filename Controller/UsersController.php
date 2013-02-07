@@ -107,6 +107,9 @@ public function logout() {
 	public function index() {
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
+
+		$this->set('title_for_layout', 'List Users');        
+		$this->layout = 'main';		
 	}
 
 /**
@@ -121,6 +124,9 @@ public function logout() {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->set('user', $this->User->read(null, $id));
+		
+		$this->set('title_for_layout', 'View Users');        
+		$this->layout = 'main';		
 	}
 
 /**
@@ -132,7 +138,7 @@ public function logout() {
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Session->setFlash(__('The user has been saved'),'Message');
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
@@ -142,6 +148,9 @@ public function logout() {
 			$groups = $this->User->Group->find('list');
 			$this->set(compact('groups'));
 		}
+
+		$this->set('title_for_layout', 'Add User');        
+		$this->layout = 'main';				
 	}
 
 /**
@@ -157,7 +166,7 @@ public function logout() {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Session->setFlash(__('The user has been saved'),'Message');
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
@@ -165,6 +174,12 @@ public function logout() {
 		} else {
 			$this->request->data = $this->User->read(null, $id);
 		}
+		$groups = $this->User->Group->find('list');
+		$this->set(compact('groups'));
+
+
+		$this->set('title_for_layout', 'Edit User');        
+		$this->layout = 'main';		
 	}
 
 /**
@@ -182,7 +197,7 @@ public function logout() {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->User->delete()) {
-			$this->Session->setFlash(__('User deleted'));
+			$this->Session->setFlash(__('The user has been deleted'),'Message');
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->Session->setFlash(__('User was not deleted'));
