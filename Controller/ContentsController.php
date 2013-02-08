@@ -47,14 +47,13 @@ public $name = 'Contents';
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null) {
         if ($this->request->is('post')) {
             $this->Content->create();
             if($this->Content->save($this->request->data)) {
             	$this->Session->setFlash(__('The content has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Content']['course_id']));
+				$this->redirect(array('controller' => 'contents', 
+									  'action' => 'add',$id));
             }
             else {
             	$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
@@ -63,7 +62,7 @@ public $name = 'Contents';
             $parents[0] = "[ No Parent ]";
 
             $nodelist = $this->Content->generateTreeList(array(
-            												  'Content.course_id'=>$this->params['url']['course_id']
+            												  'Content.course_id'=>$id
 												  			  ),null,null,'   ');
             if($nodelist) {
                 foreach ($nodelist as $key=>$value)
@@ -76,7 +75,7 @@ public $name = 'Contents';
 	        					'Outcome.description'
 	        					),
 	        	'conditions' => array(
-	        						'Outcome.course_id' =>$this->params['url']['course_id']
+	        						'Outcome.course_id' =>$id
 	        						))
 			);
 
@@ -114,6 +113,11 @@ public $name = 'Contents';
 			throw new NotFoundException(__('Invalid content'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+
+			if($this->request->data['Content']['parent_id'] == 'NULL') {
+				$this->request->data['Content']['parent_id'] = 0;
+			}
+
 			if ($this->Content->save($this->request->data)) {
 				$this->Session->setFlash(__('The content has been saved'),'Message');
 				$this->redirect(array('controller' => 'courses', 

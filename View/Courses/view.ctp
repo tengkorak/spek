@@ -1,16 +1,16 @@
 <style type="text/css">
+ul 
 #toolbar-jsus,
 #toolbar-jsub,
-#toolbar-jsup, ul {
+#toolbar-jsup {
     font-family: Arial, Verdana;
     font-size: 14px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
-#toolbar-jsus, 
-#toolbar-jsub,
-#toolbar-jsup, ul li {
+ul li 
+{
     display: block;
     position: relative;
     float: left;
@@ -18,16 +18,16 @@
 li ul {
     display: none;
 }
+li a 
 #toolbar-jsus,
 #toolbar-jsub, 
-#toolbar-jsup, li a {
+#toolbar-jsup {
     display: block;
     text-decoration: none;
     padding: 1px;
     margin-left: 1px;
     white-space: nowrap;
 }
-
 li:hover ul {
     display: block;
     position: absolute;
@@ -48,11 +48,18 @@ li:hover li {
 			<li class="button" id="toolbar-edit">
 			<?php echo $this->Html->link(__('Edit'), array('controller' => 'courses', 'action' => 'edit', $course['Course']['id'])); ?>		
 			</li>
-
+			<?php
+				if ($this->Session->read('Auth.User')){
+					if($this->Session->read('Auth.User.group_id') == 1)
+					{
+			?>
 			<li class="button" id="toolbar-delete">
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $course['Course']['id']), null, __('Are you sure you want to delete # %s?', $course['Course']['id'])); ?>
 			</li>
-
+			<?php
+					}
+				}
+			?>
 			<li class="divider">
 			</li>			
 
@@ -312,9 +319,7 @@ li:hover li {
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('New Content'), array('controller' => 'contents', 'action' => 'add',
-			'?' => array('course_id'=>$course['Course']['id'])
-		));?>
+		<?php echo $this->Html->link(__('New Content'), array('controller' => 'contents', 'action' => 'add', $course['Course']['id']));?>
 	</li>
 </ul>
 </div>

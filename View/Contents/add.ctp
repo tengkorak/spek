@@ -1,5 +1,5 @@
 <?
-debug($parents);
+// debug($parents);
 ?>
 
 <div id="mc-title">
@@ -7,8 +7,8 @@ debug($parents);
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
-			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->params['url']['course_id'])); ?>		</li>
-
+			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->passedArgs[0])); ?>
+			</li>
 			<li class="button special" id="toolbar-new">
 			<a href="#" onClick="JavaScript:document.forms.ContentAddForm.submit()" class="toolbar">
 			Save
@@ -29,7 +29,7 @@ debug($parents);
 echo $this->Form->create('Content');
 ?>
 <fieldset class="adminform">
-<input type="hidden" name="data[Content][course_id]" id="ContentCourseId" value=<?php echo $this->params['url']['course_id']?> />
+<input type="hidden" name="data[Content][course_id]" id="ContentCourseId" value=<?php echo $this->passedArgs[0]; ?> />
 <ul class="adminformlist">	
 <?php
 echo "\n<li>";
