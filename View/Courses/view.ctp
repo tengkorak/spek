@@ -86,6 +86,19 @@ li:hover li {
 			<li class="button special" id="toolbar-pdf">
 			<?php echo $this->Html->link(__(' PDF '), array('controller' => 'courses', 'action' => 'viewPdf', $course['Course']['id'])); ?>
 			</li>
+			<?php
+				if ($this->Session->read('Auth.User')){
+					if($this->Session->read('Auth.User.group_id') == 1)
+					{
+			?>			
+			<li class="button special" id="toolbar-rp">
+			<?php echo $this->Html->link(__(' Add RP '), array('controller' => 'courses', 'action' => 'searchRp', $course['Course']['id'])); ?>
+			</li>
+			<?php
+					}
+				}
+			?>
+
 		</ul>
 	</div>						
 

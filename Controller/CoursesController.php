@@ -12,7 +12,6 @@ class CoursesController extends AppController {
  *
  * @var array
  */
- // public $helpers = array('Ajax');
 public $helpers = array('Js');
 
 /**
@@ -27,6 +26,51 @@ public $helpers = array('Js');
 		$this->set('title_for_layout', 'List Course');        
 		$this->layout = 'main';	    			
 	}
+
+
+
+	public function searchRp() {
+
+    	if(!empty($this->request->data)){
+
+			$conditions = array(
+							'OR'=>array(
+            							'User.username'=>$this->request->data['User']['username'],
+            							'User.fullname LIKE '=> '%' . $this->request->data['User']['username'] . '%'
+            							)
+							);
+
+            $users = $this->Course->User->find('all', array('conditions' => $conditions));
+  		 	$this->set('users', $users);
+    		
+			if($this->request->is('ajax')){ 
+    			$this->render('users', 'ajax');
+    		}
+    	}
+
+		$this->set('title_for_layout', 'Add Resource Person');        
+		$this->layout = 'main';    	
+	}
+
+	public function addRp($id = null, $course_id = null) {
+
+		$this->Course->id = $course_id;
+
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+			$this->request->data['Course']['user_id'] = $id;
+
+			if ($this->Course->save($this->request->data)) {
+				$this->Session->setFlash(__('The RP has been assign succesfully'),'Message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $course_id,
+			));
+			} else {
+				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+			}	
+	}
+
 
 	public function copo($id = null) {
 		$this->Course->recursive = -1;
