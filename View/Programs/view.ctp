@@ -1,7 +1,3 @@
-<?php
-// debug($program);
-?>
-
 <div id="mc-title">
 	<h1> Program Overview </h1>
 
@@ -280,7 +276,16 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 				?>
 			</td>
 			<td><?php echo $course['name'];?></td>
-			<td><?php echo $course['user_id']; ?></td>
+
+			<td>
+				<?php 
+				if(!empty($course['User']['fullname'])){
+					echo $course['User']['fullname']; 
+				} else {
+					echo '&nbsp';
+				}
+				?>
+			</td>
 		</tr>
 	<?php endforeach; ?>
 	</tbody>

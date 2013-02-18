@@ -49,13 +49,21 @@ class ProgramsController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+
+		$this->Program->Behaviors->load('Containable');
+
 		$this->Program->recursive = 1;
 
-		$this->Program->id = $id;
-		if (!$this->Program->exists()) {
-			throw new NotFoundException(__('Invalid program'));
-		}
-		$this->set('program', $this->Program->read(null, $id));
+    	$programs = $this->Program->find('first', array(
+			'contain' => array('Course' => array('User'),
+							   'Faculty',
+							   'Level'),
+        	'conditions' => array(
+        						'Program.id' => $id
+        						)
+        	));
+
+		$this->set('program', $programs);
 
 		$this->set('title_for_layout', 'View Program');        
 		$this->layout = 'main';		
