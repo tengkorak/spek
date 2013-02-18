@@ -123,7 +123,7 @@
 			  
 			  echo "&nbsp; | &nbsp;";
 			  
-			  echo $this->Form->postLink(__('Delete'), array('controller' => 'slts', 'action' => 'delete', $slts[$i]['Slt']['id'],'?' => array('course_id'=>$slts[$i]['Slt']['course_id'])), null, __('Are you sure you want to delete # %s?', $slts[$i]['Slt']['id'])); 
+			  echo $this->Form->postLink(__('Delete'), array('controller' => 'slts', 'action' => 'delete',$slts[$i]['Slt']['id'],$slts[$i]['Slt']['course_id']), null, __('Are you sure you want to delete # %s?', $slts[$i]['Slt']['id'])); 
 			?>
 		</td>
 		<?php
