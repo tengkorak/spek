@@ -194,7 +194,7 @@ li:hover li {
 </table>
 <br />
 
-<h3><?php echo __('1.0 SYNOPSIS');?></h3>
+<h3><?php echo __('1.0 COURSE DESCRIPTION');?></h3>
 <?php if (!empty($course['Synopsis'])):
 		
 	$i = 0;
