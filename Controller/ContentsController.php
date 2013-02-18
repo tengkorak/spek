@@ -51,9 +51,9 @@ public $name = 'Contents';
         if ($this->request->is('post')) {
             $this->Content->create();
             if($this->Content->save($this->request->data)) {
-            	$this->Session->setFlash(__('The content has been saved'),'Message');
-				$this->redirect(array('controller' => 'contents', 
-									  'action' => 'add',$id));
+            	$this->Session->setFlash(__('The content has been saved'),'message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',$this->request->data['Content']['course_id']));
             }
             else {
             	$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
