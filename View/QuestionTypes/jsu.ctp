@@ -1,7 +1,3 @@
-<?php
-// debug($occurences);
-?>
-
 <div id="mc-title">
 	<h1> View JSU </h1>
 	<div class="mc-toolbar" id="toolbar">
@@ -43,6 +39,7 @@
 	<th rowspan=2> TIME (%) </th>
 	<th rowspan=2> MARKS (%) </th>
 	<th colspan=6> COGNITIVE </th>
+	<th rowspan=2> &nbsp; </th>
 </tr>
 <tr>
 	<th> C1 </th>
@@ -84,17 +81,27 @@
 			?>	
 			<td rowspan=<?php echo $row;?> > <?php echo $questionType['Content']['description']; ?> </td>
 			<?php
+			echo "<td rowspan=" . $row. ">";
 			foreach($questionType['Content']['Outcome'] as $content):
-				echo "<td rowspan=" . $row. ">";
 				foreach($content['Po'] as $po):
-						echo $po['description'] . "<br><br>";
+						if(!empty($po['description'])) {
+							echo $po['description'];
+						} else {
+							echo "A";
+						}
+						echo "<br><br>";
 				endforeach;				
 				echo "</td>";
 			endforeach;
 
 			echo "<td rowspan=" . $row . ">";				
 			foreach($questionType['Content']['Outcome'] as $content):
-				echo $content['description'] . "<br><br>";
+				if(!empty($content['description'])) {
+					echo $content['description'];
+				} else {
+					echo "A";
+				}
+				echo "<br><br>";
 			endforeach;
 			echo "</td>";
 			}
@@ -116,12 +123,24 @@
 		<?php
 			for($i=1; $i<=6; $i++) {
 				echo '<td>';
-					if($questionType['QuestionType']['cognitive'] == $i)
+					if( ($questionType['QuestionType']['cognitive']+1) == $i)
 						echo '<strong> / </strong>';
-						// echo $questionType['QuestionType']['type'];
 				echo '</td>';
 			}
 		?>		
+		<td>
+			<?php
+			  echo $this->Html->link(__('Edit'), array(
+			  										'controller' => 'questionTypes', 
+			  										'action' => 'edit', 
+			  										$this->passedArgs[0],1,$questionType['QuestionType']['id']
+			  										));
+			  
+			  echo "&nbsp; | &nbsp;";
+			  
+			  echo $this->Form->postLink(__('Delete'), array('controller' => 'questionTypes', 'action' => 'delete', $this->passedArgs[0],1,$questionType['QuestionType']['id']), null, __('Are you sure you want to delete # %s?', $questionType['QuestionType']['id'])); 
+			?>
+		</td>
 	</tr>
 	<?php
 	$current_content_id = $questionType['Content']['id'];
@@ -187,8 +206,8 @@
 			?>	
 			<td rowspan=<?php echo $row;?> > <?php echo $questionType['Content']['description']; ?> </td>
 			<?php
+			echo "<td rowspan=" . $row. ">";
 			foreach($questionType['Content']['Outcome'] as $content):
-				echo "<td rowspan=" . $row. ">";
 				foreach($content['Po'] as $po):
 						echo $po['description'] . "<br><br>";
 				endforeach;				
@@ -220,7 +239,6 @@
 			for($i=1; $i<=6; $i++) {
 				echo '<td>';
 					if($questionType['QuestionType']['cognitive'] == $i)
-						// echo '<strong> / </strong>';
 						echo $questionType['QuestionType']['marks'];
 				echo '</td>';
 			}

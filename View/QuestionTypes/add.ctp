@@ -3,7 +3,15 @@
 ?>
 
 <div id="mc-title">
-	<h1>Add JSU (Assessment Tools) </h1>												
+<?php
+	if($this->passedArgs[1] == 1)
+		echo "<h1>Add JSU (Assessment Tools) </h1>";
+	else if($this->passedArgs[1] == 2)
+		echo "<h1>Add JSUB (Assessment Tools) </h1>";
+	else if($this->passedArgs[1] == 3)
+		echo "<h1>Add JSUP (Assessment Tools) </h1>";
+
+?>
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
@@ -77,6 +85,9 @@
 			echo $this->Form->radio('cognitive',$options,$attributes);
 	    echo '</td>';
 		echo '</tr>';
+
+		if($this->passedArgs[1] != 1) {
+
 		echo '<tr>';
 		echo '<td><br><strong> Affective </strong><br></td>';
 		echo '<td>';
@@ -97,6 +108,8 @@
 	
 	    echo '</td>';
 		echo '</tr>';
+		}
+		
 		echo '</table>';
 	?>
 </fieldset>

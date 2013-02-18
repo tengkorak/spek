@@ -201,26 +201,49 @@ class QuestionTypesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($course_id = null, $jsu = null, $id = null) {
+
 		$this->QuestionType->id = $id;
+
 		if (!$this->QuestionType->exists()) {
 			throw new NotFoundException(__('Invalid question type'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->QuestionType->save($this->request->data)) {
-				$this->Session->setFlash(__('The question type has been saved'));
-				$this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The question type has been saved'),'message');
+
+				if($jsu == 1)
+					$view = 'jsu';
+				else if($jsu == 2)
+					$view = 'jsub';
+				else if($jsu == 3)
+					$view = 'jsup';
+
+				$this->redirect(array('action' => $view,$course_id));
 			} else {
 				$this->Session->setFlash(__('The question type could not be saved. Please, try again.'));
 			}
-		} else {
+		}
+		else {
 			$this->request->data = $this->QuestionType->read(null, $id);
 		}
-		$contents = $this->QuestionType->Content->find('list');
-		$pos = $this->QuestionType->Po->find('list');
-		$outcomes = $this->QuestionType->Outcome->find('list');
-		$slts = $this->QuestionType->Slt->find('list');
-		$this->set(compact('contents', 'pos', 'outcomes', 'slts'));
+
+		$this->QuestionType->Content->recursive = 0;
+
+    	$contents = $this->QuestionType->Content->find('list', array(
+        	'fields' => array(
+        					'Content.id',
+        					'Content.description'
+        					),
+        	'conditions' => array(
+        						'Content.course_id' => $course_id,
+        						'Content.parent_id' => 0
+        						)
+    		));
+
+		$this->set(compact('contents'));
+		$this->set('title_for_layout', 'Edit New Student Learning Time (SLT)');        
+		$this->layout = 'main';
 	}
 
 /**
@@ -229,7 +252,7 @@ class QuestionTypesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($course_id = null, $jsu = null, $id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -238,9 +261,17 @@ class QuestionTypesController extends AppController {
 			throw new NotFoundException(__('Invalid question type'));
 		}
 		if ($this->QuestionType->delete()) {
-			$this->Session->setFlash(__('Question type deleted'));
-			$this->redirect(array('action' => 'index'));
-		}
+			$this->Session->setFlash(__('Question type deleted'), 'message');
+
+				if($jsu == 1)
+					$view = 'jsu';
+				else if($jsu == 2)
+					$view = 'jsub';
+				else if($jsu == 3)
+					$view = 'jsup';
+
+				$this->redirect(array('action' => $view,$course_id));		
+			}
 		$this->Session->setFlash(__('Question type was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

@@ -1,50 +1,114 @@
-<div class="questionTypes form">
-<?php echo $this->Form->create('QuestionType');?>
-	<fieldset>
-		<legend><?php echo __('Edit Question Type'); ?></legend>
+<div id="mc-title">
 	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('content_id');
-		echo $this->Form->input('po_id');
-		echo $this->Form->input('outcome_id');
-		echo $this->Form->input('slt_id');
-		echo $this->Form->input('time');
-		echo $this->Form->input('marks');
-		echo $this->Form->input('C1');
-		echo $this->Form->input('C2');
-		echo $this->Form->input('C3');
-		echo $this->Form->input('C4');
-		echo $this->Form->input('C5');
-		echo $this->Form->input('C6');
-		echo $this->Form->input('A1');
-		echo $this->Form->input('A2');
-		echo $this->Form->input('A3');
-		echo $this->Form->input('A4');
-		echo $this->Form->input('A5');
-		echo $this->Form->input('P1');
-		echo $this->Form->input('P2');
-		echo $this->Form->input('P3');
-		echo $this->Form->input('P4');
-		echo $this->Form->input('P5');
-		echo $this->Form->input('P6');
-		echo $this->Form->input('P7');
+	if($this->passedArgs[1] == 1)
+		echo "<h1>Edit JSU (Assessment Tools) </h1>";
+	else if($this->passedArgs[1] == 2)
+		echo "<h1>Edit JSUB (Assessment Tools) </h1>";
+	else if($this->passedArgs[1] == 3)
+		echo "<h1>Edit JSUP (Assessment Tools) </h1>";
 	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit'));?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+	<div class="mc-toolbar" id="toolbar">
+		<ul>
+			<li class="button" id="toolbar-new">
+			<?php 
+			if($this->passedArgs[1] == 1)
+				$view = 'jsu';
+			else if($this->passedArgs[1] == 2)
+				$view = 'jsub';
+			else if($this->passedArgs[1] == 3)
+				$view = 'jsup';				
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('QuestionType.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('QuestionType.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Question Types'), array('action' => 'index'));?></li>
-		<li><?php echo $this->Html->link(__('List Contents'), array('controller' => 'contents', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Content'), array('controller' => 'contents', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Pos'), array('controller' => 'pos', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Po'), array('controller' => 'pos', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Outcomes'), array('controller' => 'outcomes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Outcome'), array('controller' => 'outcomes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Slts'), array('controller' => 'slts', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Slt'), array('controller' => 'slts', 'action' => 'add')); ?> </li>
-	</ul>
+			echo $this->Html->link(__('Back'), array(
+															'controller' => 'questionTypes', 
+															'action' => $view, 
+															$this->passedArgs[0])); ?>
+			</li>
+
+			<li class="button special" id="toolbar-new">
+			<a href="#" onClick="JavaScript:document.forms.QuestionTypeEditForm.submit()" class="toolbar">
+			Save
+			</a>
+			</li>
+
+			<li class="divider">
+			</li>
+		</ul>
+	</div>						
+
+	<div class="mc-clr"></div>
 </div>
+
+<div id="mc-component">
+<div class="mc-clr"></div>
+<?php echo $this->Form->create('QuestionType');?>
+	<fieldset class="adminform">	
+		<input type="hidden" name="data[QuestionType][course_id]" id="QuestionTypeCourseId" value=<?php echo $this->passedArgs[0]; 	?> />
+		<table cellpading="5" cellspacing="5">
+		<?php
+		echo '<tr>';
+		echo '<td> Content </td>';
+		echo '<td>';
+		echo $this->Form->input('content_id', array(
+												  'label'=>'',
+												  'type'=>'select'
+												  )
+						 );
+		echo '</td></tr>';
+		echo '<tr>';
+		echo '<td> Question Type </td>';
+		echo '<td colspan=2>';
+		echo $this->Form->input('type', array(
+												  'label'=>'',
+												  'type'=>'text'
+												  )
+						 );
+		echo '</td></tr>';
+		echo '<tr>';
+		echo '<td> Marks </td>';
+		echo '<td>';
+		echo $this->Form->input('marks', array(
+												  'label'=>'',
+												  'type'=>'text'
+												  )
+						 );
+		echo '</td></tr>';
+		echo '<tr>';
+		echo '<td><br><strong> Cognitive </strong><br></td>';
+		echo '<td>';
+	        $options=array(1,2,3,4,5,6);
+			$attributes=array('legend'=>false, 'separator'=>' ');
+			echo $this->Form->radio('cognitive',$options,$attributes);
+	    echo '</td>';
+		echo '</tr>';
+
+
+		if($this->passedArgs[1] != 1) {
+
+		echo '<tr>';
+		echo '<td><br><strong> Affective </strong><br></td>';
+		echo '<td>';
+
+	        $options=array(1,2,3,4,5);
+			$attributes=array('legend'=>false, 'separator'=>' ');
+			echo $this->Form->radio('affective',$options,$attributes);
+	
+	    echo '</td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<td><br><strong> Psychomotor </strong><br></td>';
+		echo '<td>';
+
+	        $options=array(1,2,3,4,5,6,7);
+			$attributes=array('legend'=>false, 'separator'=>' ');
+			echo $this->Form->radio('psychomotor',$options,$attributes);
+	
+	    echo '</td>';
+		echo '</tr>';
+		}
+
+		echo '</table>';
+	?>
+</fieldset>
+</form>
+</div>
+</br>
