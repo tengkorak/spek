@@ -90,7 +90,7 @@ class SltsController extends AppController {
 
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Slt->save($this->request->data)) {
-				$this->Session->setFlash(__('The slt has been saved'),'Message');
+				$this->Session->setFlash(__('The slt has been saved'),'message');
 				$this->redirect(array('action' => 'view',$this->request->data['Slt']['course_id']));			
 			} else {
 				$this->Session->setFlash(__('The slt could not be saved. Please, try again.'));
@@ -122,7 +122,7 @@ class SltsController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $course_id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -131,8 +131,8 @@ class SltsController extends AppController {
 			throw new NotFoundException(__('Invalid slt'));
 		}
 		if ($this->Slt->delete()) {
-			$this->Session->setFlash(__('Slt deleted'),'Message');
-			$this->redirect(array('action' => 'view',$this->request->data['Slt']['course_id']));			
+			$this->Session->setFlash(__('Slt deleted'),'message');
+			$this->redirect(array('action' => 'view',$course_id));			
 		}
 		$this->Session->setFlash(__('Slt was not deleted'));
 		$this->redirect(array('action' => 'index'));
