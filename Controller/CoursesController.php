@@ -59,18 +59,31 @@ public $helpers = array('Js');
 		if (!$this->Course->exists()) {
 			throw new NotFoundException(__('Invalid course'));
 		}
-			$this->request->data['Course']['user_id'] = $id;
+
+		$group_id = $this->Auth->user('group_id');
+		$user_id = $this->Auth->user('id');			
+		$this->request->data['Course']['user_id'] = $id;
+
+		if($group_id == 1 || $this->Course->Program->isCoordinator($course_id, $user_id)) {
 
 			if ($this->Course->save($this->request->data)) {
-				$this->Session->setFlash(__('The RP has been assign succesfully'),'Message');
+				$this->Session->setFlash(__('The RP has been assign succesfully'),'message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view', $course_id,
-			));
+				));
 			} else {
 				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
-			}	
-	}
+			}
 
+		}
+		else {
+			$this->Session->setFlash(__('You are not authorized to assign Resource Person for this course'),'error');
+
+			$this->redirect(array('controller' => 'courses', 
+								  'action' => 'view',
+								  $course_id));			
+		}	
+	}
 
 	public function copo($id = null) {
 		$this->Course->recursive = -1;
