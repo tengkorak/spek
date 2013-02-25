@@ -88,4 +88,9 @@ class Program extends AppModel {
 		)
 	);
 
+	public function isCoordinator($course, $user) {
+    return $this->field('id', array('id' => $course, 'user_id' => $user)) === $course;
+	}
+
+
 }
