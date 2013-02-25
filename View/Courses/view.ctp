@@ -88,7 +88,8 @@ li:hover li {
 			</li>
 			<?php
 				if ($this->Session->read('Auth.User')){
-					if($this->Session->read('Auth.User.group_id') == 1)
+					if($this->Session->read('Auth.User.group_id') == 1 || 
+					   $this->Session->read('Auth.User.group_id') == 4)
 					{
 			?>			
 			<li class="button special" id="toolbar-rp">
@@ -98,7 +99,6 @@ li:hover li {
 					}
 				}
 			?>
-
 		</ul>
 	</div>						
 

@@ -1,9 +1,13 @@
+<?php
+$group_id = $this->Session->read('Auth.User.group_id');
+?>
+
 <div id="mc-title">
 	<h1> Programs </h1>												
 	<div class="mc-toolbar" id="toolbar">
 
 	<?php
-	if($this->Session->read('Auth.User.group_id') == 1) {
+	if($group_id == 1) {
 	?>
 		<ul>
 			<li class="button special" id="toolbar-new">
@@ -31,6 +35,14 @@
 			<th><?php echo $this->Paginator->sort('id','Program Code');?></th>
 			<th><?php echo $this->Paginator->sort('name_be','Name (English)');?></th>
 			<th><?php echo $this->Paginator->sort('name_bm','Name (Malay)');?></th>
+
+			<?php
+				if($group_id == 1 || $group_id == 4) {
+			?>
+				<th> Role </th>
+			<?php
+				}
+			?>
 		</tr>
 	</thead>
 	<tbody>
@@ -40,6 +52,20 @@
 		<td><?php echo $this->Html->link($program['Program']['id'], array('action' => 'view', $program['Program']['id'])); ?>&nbsp;</td>		
 		<td><?php echo h( strtoupper( $program['Program']['name_be']) ); ?>&nbsp;</td>
 		<td><?php echo h( strtoupper( $program['Program']['name_bm']) ); ?>&nbsp;</td>
+		<?php
+			if($group_id == 1 || $group_id == 4) {
+		?>		
+		<td>
+			<?php
+				if($program['Program']['user_id'] != 0) 
+					echo "Coordinator ";
+				if($program['Course']['user_id'] != 0) 
+					echo "Resource Person ";
+			?>
+		</td>
+			<?php
+				}
+			?>		
 	</tr>
 	<?php endforeach; ?>
 	</tbody>

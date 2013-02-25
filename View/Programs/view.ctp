@@ -1,3 +1,7 @@
+<?php
+$group_id = $this->Session->read('Auth.User.group_id');
+?>
+
 <div id="mc-title">
 	<h1> Program Overview </h1>
 
@@ -34,7 +38,7 @@
 			</li>
 
 			<?php
-			if($this->Session->read('Auth.User.group_id') == 1) {
+			if($group_id == 1 || $group_id == 4) {
 			?>
 
 			<li class="button" id="toolbar-edit">
@@ -106,7 +110,7 @@
 	<th><?php echo __('Objectives'); ?></th>
 
 	<?php
-	if($this->Session->read('Auth.User.group_id') == 1) {
+	if($group_id == 1 || $group_id == 4) {
 	?>
 	
 	<th class="actions">&nbsp;</th>
@@ -125,7 +129,7 @@
 		<td><?php echo $i . ". " . $peo['description'];?></td>
 
 		<?php
-		if($this->Session->read('Auth.User.group_id') == 1) {
+		if($group_id == 1 || $group_id == 4) {
 		?>
 
 		<td class="actions">
@@ -149,7 +153,7 @@ endforeach;
 <?php endif; ?>
 
 <?php
-if($this->Session->read('Auth.User.group_id') == 1) {
+if($group_id == 1 || $group_id == 4) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -175,7 +179,7 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 		<th><?php echo __('Outcomes'); ?></th>
 
 	<?php
-	if($this->Session->read('Auth.User.group_id') == 1) {
+			if($group_id == 1 || $group_id == 4) {
 	?>		
 	
 	<th class="actions">&nbsp;</th>
@@ -194,7 +198,7 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 			<td><?php echo $i . ". " . $po['description'];?></td>
 
 		<?php
-		if($this->Session->read('Auth.User.group_id') == 1) {
+			if($group_id == 1 || $group_id == 4) {
 		?>			
 
 			<td class="actions">
@@ -219,7 +223,7 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 <?php endif; ?>
 
 <?php
-if($this->Session->read('Auth.User.group_id') == 1) {
+	if($group_id == 1 || $group_id == 4) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -275,12 +279,12 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 			<td  width="10%"><?php echo $this->Html->link($course['id'], array('controller' => 'courses', 'action' => 'view', $course['id'])); 
 				?>
 			</td>
-			<td><?php echo $course['name'];?></td>
+			<td><?php echo strtoupper($course['name']);?></td>
 
 			<td>
 				<?php 
 				if(!empty($course['User']['fullname'])){
-					echo $course['User']['fullname']; 
+					echo strtoupper($course['User']['fullname']); 
 				} else {
 					echo '&nbsp';
 				}
@@ -293,7 +297,7 @@ if($this->Session->read('Auth.User.group_id') == 1) {
 <?php endif; ?>
 
 <?php
-if($this->Session->read('Auth.User.group_id') == 1) {
+	if($group_id == 1 || $group_id == 4) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
