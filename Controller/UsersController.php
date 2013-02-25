@@ -25,19 +25,24 @@ public function initDB() {
     $group->id = 1;
     $this->Acl->allow($group, 'controllers');
 
-    //allow data generator to required controllers
+    //allow resource_person to required controllers
     $group->id = 2;
     $this->Acl->deny($group, 'controllers');
     $this->Acl->allow($group, 'controllers/Assessments');
     $this->Acl->allow($group, 'controllers/Contents');
     $this->Acl->allow($group, 'controllers/Courses');
+    $this->Acl->allow($group, 'controllers/Courses/index');
+    $this->Acl->allow($group, 'controllers/Courses/view');
+    $this->Acl->allow($group, 'controllers/Courses/edit');
+    $this->Acl->allow($group, 'controllers/Courses/viewPdf');    
     $this->Acl->allow($group, 'controllers/Instructions');
     $this->Acl->allow($group, 'controllers/Outcomes');
     $this->Acl->allow($group, 'controllers/Peos');
     $this->Acl->allow($group, 'controllers/Pos');
     $this->Acl->allow($group, 'controllers/QuestionMarks');    
     $this->Acl->allow($group, 'controllers/QuestionTypes');    
-    $this->Acl->allow($group, 'controllers/Programs');
+    $this->Acl->allow($group, 'controllers/Programs/index');
+    $this->Acl->allow($group, 'controllers/Programs/view');    
     $this->Acl->allow($group, 'controllers/References');           
 	$this->Acl->allow($group, 'controllers/Slts');
     $this->Acl->allow($group, 'controllers/Synopses');    
@@ -55,6 +60,26 @@ public function initDB() {
     $this->Acl->allow($group, 'controllers/Users/login');
     $this->Acl->allow($group, 'controllers/Users/logout');
     $this->Acl->allow($group, 'controllers/Users/register');    
+
+    //allow resource_person to required controllers
+    $group->id = 4;
+    $this->Acl->deny($group, 'controllers');
+    $this->Acl->allow($group, 'controllers/Assessments');
+    $this->Acl->allow($group, 'controllers/Contents');
+    $this->Acl->allow($group, 'controllers/Courses');
+    $this->Acl->allow($group, 'controllers/Instructions');
+    $this->Acl->allow($group, 'controllers/Outcomes');
+    $this->Acl->allow($group, 'controllers/Peos');
+    $this->Acl->allow($group, 'controllers/Pos');
+    $this->Acl->allow($group, 'controllers/QuestionMarks');    
+    $this->Acl->allow($group, 'controllers/QuestionTypes');    
+    $this->Acl->allow($group, 'controllers/Programs');
+    $this->Acl->allow($group, 'controllers/References');           
+	$this->Acl->allow($group, 'controllers/Slts');
+    $this->Acl->allow($group, 'controllers/Synopses');    
+    $this->Acl->allow($group, 'controllers/Textbooks');    
+    $this->Acl->allow($group, 'controllers/Users/login');
+    $this->Acl->allow($group, 'controllers/Users/logout');
 
     //we add an exit to avoid an ugly "missing views" error message
     echo "all done";
