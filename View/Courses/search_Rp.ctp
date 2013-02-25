@@ -1,8 +1,17 @@
 <div id="mc-title">
 	<h1> Add Resource Person </h1>																	
-
+	<div class="mc-toolbar" id="toolbar">
+		<ul>
+			<li class="button" id="toolbar-back">
+			<?php 
+				echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->passedArgs[0])); ?>						
+			</li>
+		</ul>
+	</div>
+	
 	<div class="mc-clr"></div>
 </div>
+
 
 <div id="mc-component">
 <div class="mc-clr"></div>
