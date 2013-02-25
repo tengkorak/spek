@@ -8,20 +8,17 @@ App::uses('AppController', 'Controller', 'AuthComponent', 'Controller/Component'
  */
 class ProgramsController extends AppController {
 
-
 /**
  * index method
  *
  * @return void
  */
-
 	public function index() {
 		$this->Program->recursive = 0;
 
 		$group = $this->Auth->user('group_id');
 
-	    //If user is RP
-		if( $group == 2 ) {
+		if( $group == 2 ) { 		 //If user is RP
 			$this->paginate = array(
 				'conditions' => array('Course.user_id' => $this->Auth->user('id')),
 				'fields' => array(
@@ -36,6 +33,30 @@ class ProgramsController extends AppController {
 						)
 				));
 		}
+		if( $group == 4 ) {			 //If user is Program Coordinator
+
+
+			$conditions = array("OR" => array(
+											  'Course.user_id' => $this->Auth->user('id'),
+											  'Program.user_id' => $this->Auth->user('id')
+											));
+
+			$this->paginate = array(
+				'conditions' => $conditions,
+				'fields' => array(
+								'DISTINCT Program.id, Program.name_be, Program.name_bm, Program.user_id, Course.user_id'
+								),
+				'order' => array('Program.user_id' => 'desc'),			
+				'joins' => array(
+						array(
+							'alias' => 'Course',
+							'table' => 'courses',
+							'type' => 'INNER',
+							'conditions' => 'Program.id = Course.program_id'
+						)
+				));
+		}	
+	
 		$this->set('programs', $this->paginate());
 
 		$this->set('title_for_layout', 'List Programs');        
@@ -56,6 +77,8 @@ class ProgramsController extends AppController {
 
     	$programs = $this->Program->find('first', array(
 			'contain' => array('Course' => array('User'),
+							   'Peo',
+							   'Po',
 							   'Faculty',
 							   'Level'),
         	'conditions' => array(
