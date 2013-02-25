@@ -164,4 +164,8 @@ public $actsAs = array('Tree');
 		)
 	);
 
+	public function isResourcePerson($course, $user) {
+    return $this->field('id', array('id' => $course, 'user_id' => $user)) === $course;
+	}
+
 }
