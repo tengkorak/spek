@@ -5,9 +5,9 @@ class User extends AppModel {
     public $name = 'User';
 
     public $belongsTo = array('Group');
-    public $actsAs = array('Acl' => array('type' => 'requester'));
+//    public $actsAs = array('Acl' => array('type' => 'requester'));
 
-    public function parentNode() {
+/*    public function parentNode() {
         if (!$this->id && empty($this->data)) {
             return null;
         }
@@ -22,7 +22,11 @@ class User extends AppModel {
             return array('Group' => array('id' => $groupId));
         }
     }
-        
+*/   
+    public function bindNode($user) {
+        return array('model' => 'Group', 'foreign_key' => $user['User']['group_id']);
+    }
+    
     public $validate = array(
        'fullname' => array(
             'required' => array(

@@ -107,7 +107,7 @@ public function login() {
  
             $this->redirect(array('controller'=>'programs', 'action'=>'index'));
         } else {
-            $this->Session->setFlash(__('Invalid username or password, try again'),'Message');
+            $this->Session->setFlash('Invalid username or password, try again','message');
         }
     }
 
