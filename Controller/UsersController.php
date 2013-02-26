@@ -61,7 +61,7 @@ public function initDB() {
     $this->Acl->allow($group, 'controllers/Users/logout');
     $this->Acl->allow($group, 'controllers/Users/register');    
 
-    //allow resource_person to required controllers
+    //allow KPP/PP to required controllers
     $group->id = 4;
     $this->Acl->deny($group, 'controllers');
     $this->Acl->allow($group, 'controllers/Assessments');

@@ -9,6 +9,13 @@ App::uses('AppController', 'Controller', 'AuthComponent', 'Controller/Component'
 class ProgramsController extends AppController {
 
 /**
+ * Helpers
+ *
+ * @var array
+ */
+public $helpers = array('Js');
+
+/**
  * index method
  *
  * @return void
@@ -62,6 +69,74 @@ class ProgramsController extends AppController {
 		$this->set('title_for_layout', 'List Programs');        
 		$this->layout = 'main';			
 	}
+
+/**
+*
+* search coordinator method
+*
+*/
+
+	public function searchCoor() {
+
+    	if(!empty($this->request->data)){
+
+			$conditions = array(
+							'OR'=>array(
+            							'User.username'=>$this->request->data['User']['username'],
+            							'User.fullname LIKE '=> '%' . $this->request->data['User']['username'] . '%'
+            							)
+							);
+
+            $users = $this->Program->User->find('all', array('conditions' => $conditions));
+  		 	$this->set('users', $users);
+    		
+			if($this->request->is('ajax')){ 
+    			$this->render('users', 'ajax');
+    		}
+    	}
+
+		$this->set('title_for_layout', 'Add Coordinator');
+		$this->layout = 'main';    	
+	}
+
+/**
+*
+* add coordinator method
+*
+*/
+
+	public function addCoor($id = null, $program_id = null) {
+
+		$this->Program->id = $program_id;
+
+		if (!$this->Program->exists()) {
+			throw new NotFoundException(__('Invalid program'));
+		}
+
+		$group_id = $this->Auth->user('group_id');
+		$this->request->data['Program']['user_id'] = $id;
+
+		if($group_id == 1) {
+
+			if ($this->Program->save($this->request->data)) {
+				$this->Session->setFlash(__('The Pengerusi Program/KPP has been assign succesfully'),'message');
+				$this->redirect(array('controller' => 'programs', 
+									  'action' => 'view', $program_id,
+				));
+			} else {
+				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+			}
+
+		}
+		else {
+			$this->Session->setFlash(__('You are not authorized to assign Pengerusi Program/KPP for this course'),'error');
+
+			$this->redirect(array('controller' => 'programs', 
+								  'action' => 'view',
+								  $program_id));			
+		}	
+	}
+
 
 /**
  * view method

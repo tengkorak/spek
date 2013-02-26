@@ -32,6 +32,13 @@ class Program extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),		
 		'Level' => array(
 			'className' => 'Level',
 			'foreignKey' => 'level_id',

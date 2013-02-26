@@ -53,7 +53,19 @@ $group_id = $this->Session->read('Auth.User.group_id');
 
 			<?php
 			}
+
+			if($group_id == 1) {
 			?>
+
+			<li class="button special" id="toolbar-edit">
+			<a href="/uhek/programs/searchCoor/<?php echo $program['Program']['id'];?>" class="toolbar">
+			Add KPP/ PP
+			</a>
+			</li>
+
+			<?php
+			}
+			?>			
 		</ul>
 	</div>						
 

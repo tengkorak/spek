@@ -1,5 +1,6 @@
 <?php
 $group_id = $this->Session->read('Auth.User.group_id');
+$user_id = $this->Session->read('Auth.User.id');
 ?>
 
 <div id="mc-title">
@@ -37,7 +38,7 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			<th><?php echo $this->Paginator->sort('name_bm','Name (Malay)');?></th>
 
 			<?php
-				if($group_id == 1 || $group_id == 4) {
+				if($group_id == 4) {
 			?>
 				<th> Role </th>
 			<?php
@@ -53,14 +54,14 @@ $group_id = $this->Session->read('Auth.User.group_id');
 		<td><?php echo h( strtoupper( $program['Program']['name_be']) ); ?>&nbsp;</td>
 		<td><?php echo h( strtoupper( $program['Program']['name_bm']) ); ?>&nbsp;</td>
 		<?php
-			if($group_id == 1 || $group_id == 4) {
+			if($group_id == 4) {
 		?>		
 		<td>
 			<?php
-				if($program['Program']['user_id'] != 0) 
-					echo "Coordinator ";
-				if($program['Course']['user_id'] != 0) 
-					echo "Resource Person ";
+				if($program['Program']['user_id'] == $user_id) 
+					echo "KPP/ PP ";
+				if($program['Course']['user_id'] == $user_id) 
+					echo "Resource Person";
 			?>
 		</td>
 			<?php
