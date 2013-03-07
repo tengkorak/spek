@@ -63,8 +63,9 @@ public $helpers = array('Js');
 		$group_id = $this->Auth->user('group_id');
 		$user_id = $this->Auth->user('id');			
 		$this->request->data['Course']['user_id'] = $id;
+		$program_id = $this->request->data['Course']['program_id'];
 
-		if($group_id == 1 || $this->Course->Program->isCoordinator($course_id, $user_id)) {
+		if($group_id == 1 || $this->Course->Program->isCoordinator($program_id, $user_id)) {
 
 			if ($this->Course->save($this->request->data)) {
 				$this->Session->setFlash(__('The RP has been assign succesfully'),'message');
