@@ -181,4 +181,51 @@ public $name = 'Contents';
 		$this->Session->setFlash(__('Content was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	function moveup($id = null, $delta = null) {
+		 
+		$this->Content->id=$id;
+	    
+	    if (!$this->Content->exists()) {
+	       throw new NotFoundException(__('Invalid content'));
+	    }
+
+	    if ($delta > 0) {
+	        $this->Content->moveUp($this->Content->id, abs($delta));
+	    } else {
+	        $this->Session->setFlash('Please provide the number of positions the field should be moved down.');
+	    }
+		 
+		$this->redirect(array('controller'=> 'courses',
+		 					  'action' => 'view',
+							  $this->params['url']['course_id']));
+	}
+ 
+	function movedown($id = null, $delta = null) {
+		 
+		$this->Content->id=$id;
+	    
+	    if (!$this->Content->exists()) {
+	       throw new NotFoundException(__('Invalid content'));
+	    }
+
+	    if ($delta > 0) {
+	        $this->Content->moveDown($this->Content->id, abs($delta));
+	    } else {
+	        $this->Session->setFlash('Please provide the number of positions the field should be moved down.');
+	    }
+		 
+		$this->redirect(array('controller'=> 'courses',
+							  'action' => 'view',
+							  $this->params['url']['course_id']));
+	}
+
+	 function removeNode($id=null){
+		 if($id==null)
+		 die("Nothing to Remove");
+		 if($this->Category->removeFromTree($id)==false)
+		 $this->Session->setFlash('The Category can\'t be removed.');
+		 $this->redirect(array('action'=>'index'));
+	 }
+
 }

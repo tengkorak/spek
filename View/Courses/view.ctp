@@ -319,8 +319,18 @@ li:hover li {
 		?>
 			<span class="comment_actions">
 				<?php
-				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id']));	
+				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id']));
+
 				  echo '&nbsp';
+
+ 				  echo $this->Html->link("Up", array('controller' => 'contents', 'action'=>'moveup', $nodelist['Content']['id'],1,'?' => array('course_id'=>$course['Course']['id'])),array('style'=>'font-weight:lighter;font-size:9px;color:green;','title'=>'Move Up the Tree'));
+
+				  echo '&nbsp';
+
+ 				  echo $this->Html->link("Down", array('controller' => 'contents', 'action'=>'movedown', $nodelist['Content']['id'],1,'?' => array('course_id'=>$course['Course']['id'])),array('style'=>'font-weight:lighter;font-size:9px;color:green;','title'=>'Move Down the Tree'));
+
+ 				  echo '&nbsp';
+
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); ?>
 			</span>
 		</div>
