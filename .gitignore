@@ -8,3 +8,6 @@
 
 # prevent examples from TCPDF ending up in repo
 /Vendor/tcpdf/examples/
+
+#prevent MAC OS X related files ending up in repo
+.DS_STORE
