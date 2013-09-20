@@ -38,7 +38,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
-<link rel="stylesheet" href="/uhek/css/colors.css.php" type="text/css" />	
+<link rel="stylesheet" href="/css/colors.css.php" type="text/css" />	
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js">
 </script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
@@ -53,13 +53,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<div id="mc-status">
 				<ul>
 					<li class="action">
-						<a href="/uhek/users/register/"> Register </a>
+						<a href="/users/register/"> Register </a>
 					</li>					
 				</ul>					
 			</div>	
 		</div>
 		<div id="mc-logo">
-			<img src="/uhek/img/logo.png" alt="logo" class="mc-logo" width="40" height="40" />
+			<img src="/img/logo.png" alt="logo" class="mc-logo" width="40" height="40" />
 			<h1>SPeK Administrator Login</h1>
 		</div>
 	</div>

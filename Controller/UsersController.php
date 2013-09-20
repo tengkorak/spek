@@ -111,7 +111,7 @@ public function login() {
         }
     }
 
-	$this->set('title_for_layout', 'Welcome to OBEMS, please authenticate');        
+	$this->set('title_for_layout', 'Welcome to SPeK, please authenticate');        
 	$this->layout = 'login';	
 
 }

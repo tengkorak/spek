@@ -38,7 +38,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
-<link rel="stylesheet" href="/uhek/css/colors.css.php" type="text/css" />	
+<link rel="stylesheet" href="/css/colors.css.php" type="text/css" />	
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js">
 </script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
@@ -51,20 +51,20 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<div id="mc-status">
 				<ul class="active">
 					<li class="action">
-						<span class="logout"><a href="/uhek/users/logout"> Logout </a></span>
+						<span class="logout"><a href="/users/logout"> Logout </a></span>
 					</li>
 				</ul>					
 			</div>
 					
 			<div id="mc-logo">
-				<img src="/uhek/img/logo.png" alt="logo" class="mc-logo" width="40" height="40" />						
+				<img src="/img/logo.png" alt="logo" class="mc-logo" width="40" height="40" />						
 				<h1>SPeK Administrator</h1>
 			</div>
 
 			<div id="mc-nav">
 					<ul id="mctrl-menu" class="menutop level1">
 					<li class="li-dashboard dashboard root">
-							<a class="dashboard item" href="/uhek/programs/"> Home </a>
+							<a class="dashboard item" href="/programs/"> Home </a>
 					</li>
 					<?php
 						if ($this->Session->read('Auth.User')){
@@ -75,10 +75,10 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<span class=" daddy item"><span>Users</span></span>
 						<ul class="level2 parent-users">
 							<li class="li-user-manager class:user parent">
-								<a class="class:user daddy item" href="/uhek/users/"> Manage Users
+								<a class="class:user daddy item" href="/users/"> Manage Users
 								</a>
 									<ul class="level3 parent-user-manager">
-									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/users/add"> Add New User</a>
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/users/add"> Add New User</a>
 									</li>
 								</ul>
 							</li>
@@ -88,10 +88,10 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<span class=" daddy item"><span>Programs</span></span>
 						<ul class="level2 parent-users">
 							<li class="li-user-manager class:user parent">
-								<a class="class:user daddy item" href="/uhek/programs/"> Manage Programs
+								<a class="class:user daddy item" href="/programs/"> Manage Programs
 								</a>
 									<ul class="level3 parent-user-manager">
-									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/programs/add"> Add New Program </a>
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/programs/add"> Add New Program </a>
 									</li>
 								</ul>
 							</li>
@@ -101,10 +101,10 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						<span class=" daddy item"><span> Courses </span></span>
 						<ul class="level2 parent-users">
 							<li class="li-user-manager class:user parent">
-								<a class="class:user daddy item" href="/uhek/courses/"> Manage Courses 
+								<a class="class:user daddy item" href="/courses/"> Manage Courses 
 								</a>
 									<ul class="level3 parent-user-manager">
-									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/uhek/courses/add"> Add New Course </a>
+									<li class="li-add-new-user class:newarticle"><a class="class:newarticle item" href="/courses/add"> Add New Course </a>
 									</li>
 								</ul>
 							</li>
@@ -120,7 +120,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<div id="mc-userinfo">
 				<div class="mc-userinfo2">
 					<div class="gravatar">
-						<img src="/uhek/img/avatar.png" alt="gravatar" />
+						<img src="/img/avatar.png" alt="gravatar" />
 					</div>
 					<div class="userinfo active">
 						<b>
