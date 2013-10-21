@@ -29,6 +29,9 @@ body #mc-status .select-arrow {border-left: 1px solid <?php echo $header_bg_colo
 .mc-button a, #editor-xtd-buttons a, .button2-left a,#mc-login #form-login .button,#help.mc-toolbar a,.mc-toolbar .special a,#mc-submenu .active,.pane-sliders .panel h3.jpane-toggler-down,.pane-sliders .panel h3.pane-toggler-down, .mc-pagination-container .pages,input[type="submit"]{background:<?php echo $active_bg_color;?>;}
 .menutop.disabled li.root.active > span.item:hover,.menutop.disabled li.active:hover > .item,.menutop li.active > .item, .mc-module-standard table.adminlist td.title, .mc-module-standard table.adminlist th, #mc-cpanel .pane-sliders .panel h3.jpane-toggler-down, #mc-cpanel .pane-sliders .panel h3.pane-toggler-down, .adminlist thead, .adminlist thead tr:hover {background-color:<?php echo $active_bg_color;?>;}
 #mc-header {border-bottom:10px solid <?php echo $active_bg_color;?>;}
+
+.mc-toolbar .submit a{ background-color:#C62D2D; }
+
 /* active text */
 #mc-standard .mc-button a, #editor-xtd-buttons a, .button2-left a,#mc-login #form-login .button,.adminlist thead,.pane-sliders .panel h3.jpane-toggler-down,.pane-sliders .panel h3.pane-toggler-down,.mc-pagination-container .pages a,.mc-pagination-container .pages span,.menutop.disabled li.root.active > span.item:hover,.menutop.disabled li.active:hover > .item,.menutop li.active > .item, .mc-module-standard table.adminlist td.title, .mc-module-standard table.adminlist th, .pane-sliders .panel h3.jpane-toggler-down, .pane-sliders .panel h3.pane-toggler-down a, #mc-header .menutop .active a, #mc-submenu .active,#mc-submenu li span.nolink.active, .adminlist thead, .adminlist thead a, .adminlist thead tr:hover {color:<?php echo $active_text_color;?>;}
 /* hover background */
