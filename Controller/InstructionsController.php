@@ -48,7 +48,7 @@ public $helpers = array('Js');
 		if ($this->request->is('post')) {
 			$this->Instruction->create();
 			if ($this->Instruction->save($this->request->data)) {
-				$this->Session->setFlash(__('The instruction has been saved'),'Message');
+				$this->Session->setFlash(__('The instruction has been saved'),'message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
 									  $this->request->data['Instruction']['course_id']));
