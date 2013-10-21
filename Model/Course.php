@@ -42,13 +42,6 @@ public $actsAs = array('Tree');
 			'fields' => '',
 			'order' => ''
 		),
-		'Program' => array(
-			'className' => 'Program',
-			'foreignKey' => 'program_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Level' => array(
 			'className' => 'Level',
 			'foreignKey' => 'level_id',
@@ -161,8 +154,41 @@ public $actsAs = array('Tree');
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+		'CourseSubmit' => array(
+			'className' => 'CourseSubmit',
+			'foreignKey' => 'course_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => 'created',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)		
+	);
+
+	public $hasAndBelongsToMany = array(
+		'Program' => 
+			array(
+				'className' => 'Program',
+				'joinTable' => 'courses_programs',
+				'foreignKey' => 'course_id',
+				'associationForeignKey' => 'program_id',
+				'unique' => 'keepExisting',
+				'conditions' => '',
+				'fields' => '',
+				'order' => '',
+				'limit' => '',
+				'offset' => '',
+				'finderQuery' => '',
+				'deleteQuery' => '',
+				'insertQuery' => ''
 		)
 	);
+
 
 	public function isResourcePerson($course, $user) {
     return $this->field('id', array('id' => $course, 'user_id' => $user)) === $course;

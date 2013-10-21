@@ -54,19 +54,6 @@ class Program extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'Course' => array(
-			'className' => 'Course',
-			'foreignKey' => 'program_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => 'semester',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'Peo' => array(
 			'className' => 'Peo',
 			'foreignKey' => 'program_id',
@@ -95,9 +82,26 @@ class Program extends AppModel {
 		)
 	);
 
+	public $hasAndBelongsToMany = array(
+		'Course' => 
+			array(
+				'className' => 'Course',
+				'joinTable' => 'courses_programs',
+				'foreignKey' => 'program_id',
+				'associationForeignKey' => 'course_id',
+				'unique' => 'keepExisting',
+				'conditions' => '',
+				'fields' => '',
+				'order' => '',
+				'limit' => '',
+				'offset' => '',
+				'finderQuery' => '',
+				'deleteQuery' => '',
+				'insertQuery' => ''
+		)
+	);
+
 	public function isCoordinator($program, $user) {
     return $this->field('id', array('id' => $program, 'user_id' => $user)) === $program;
 	}
-
-
 }
