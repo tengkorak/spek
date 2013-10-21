@@ -10,4 +10,6 @@
 /Vendor/tcpdf/examples/
 
 #prevent MAC OS X related files ending up in repo
-.DS_STORE
+.DS_Store
+database.php.default
+
