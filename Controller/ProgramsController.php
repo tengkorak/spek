@@ -20,51 +20,131 @@ public $helpers = array('Js');
  *
  * @return void
  */
+
 	public function index() {
+		$group = $this->Auth->user('group_id');
+		$user_id = $this->Auth->user('id');	
+
 		$this->Program->recursive = 0;
 
-		$group = $this->Auth->user('group_id');
+		if( $group == 2 ) { 		 // If user is RP
 
-		if( $group == 2 ) { 		 //If user is RP
-			$this->paginate = array(
-				'conditions' => array('Course.user_id' => $this->Auth->user('id')),
-				'fields' => array(
-								'DISTINCT Program.id, Program.name_be, Program.name_bm '
-								),			
-				'joins' => array(
-						array(
-							'alias' => 'Course',
-							'table' => 'courses',
-							'type' => 'INNER',
-							'conditions' => 'Program.id = Course.program_id'
-						)
-				));
+			$conditions = array(
+	    						 'Course.user_id' => $user_id
+								);
+
+            $courses = $this->Program->Course->find('list', array(
+            													'conditions' => $conditions,
+            													'fields' => 'id'
+            													));
+
+            $i = 0;
+            $course_list = "";
+
+			foreach ( $courses as $course ) {
+
+				if($i != 0)
+					$course_list .= ',';
+
+				$course_list .= '"' . $course . '"';
+				$i++;
+			}
+
+			$options['joins'] = array(
+				array('table' => 'courses_programs',
+					  'alias' => 'CoursesProgram',
+					  'type' => 'inner',
+					  'conditions' => array(
+					  		'CoursesProgram.course_id IN (' . $course_list . ') AND CoursesProgram.program_id = Program.id' 
+					  		)
+					  	),			
+				);
+
+			$options['group'] = array(
+									'Program.id'
+									);
+
+			$options['fields'] = array(
+									 'Program.id',
+									 'Program.name_be',
+									 'Program.name_bm'
+									 );
+
+			$this->Program->unbindModel(
+        	array(
+        		  'belongsTo' => array('Faculty','Level','User')
+        		  )
+			);
+
+			$courses = $this->Program->find('all', $options);
 		}
-		if( $group == 4 ) {			 //If user is Program Coordinator
+		else {			 //If user is Program Coordinator
+			
+			$conditions = array(
+	    						 'Course.user_id' => $user_id
+								);
 
+            $courses = $this->Program->Course->find('list', array(
+            													'conditions' => $conditions,
+            													'fields' => 'id'
+            													));
 
-			$conditions = array("OR" => array(
-											  'Course.user_id' => $this->Auth->user('id'),
-											  'Program.user_id' => $this->Auth->user('id')
-											));
+            $i = 0;
+            $course_list = "";
 
-			$this->paginate = array(
-				'conditions' => $conditions,
-				'fields' => array(
-								'DISTINCT Program.id, Program.name_be, Program.name_bm, Program.user_id, Course.user_id'
-								),
-				'order' => array('Program.user_id' => 'desc'),			
-				'joins' => array(
-						array(
-							'alias' => 'Course',
-							'table' => 'courses',
-							'type' => 'INNER',
-							'conditions' => 'Program.id = Course.program_id'
-						)
-				));
+			foreach ( $courses as $course ) {
+
+				if($i != 0)
+					$course_list .= ',';
+
+				$course_list .= '"' . $course . '"';
+				$i++;
+			}
+
+			$options['joins'] = array(
+				array('table' => 'courses_programs',
+					  'alias' => 'CoursesProgram',
+					  'type' => 'inner',
+					  'conditions' => array(
+					  		'CoursesProgram.course_id IN (' . $course_list . ') AND CoursesProgram.program_id = Program.id' 
+					  		)
+					  	),			
+				);
+
+			$options['group'] = array(
+									'Program.id'
+									);
+
+			$options['fields'] = array(
+									 'Program.id',
+									 'Program.name_be',
+									 'Program.name_bm'
+									 );
+
+			$this->Program->unbindModel(
+        	array(
+        		  'belongsTo' => array('Faculty','Level','User')
+        		  )
+			);
+
+			$courses = $this->Program->find('all', $options);
+
+			$conditions = array(
+	    						 'Program.user_id' => $user_id
+								);
+
+			$this->Program->unbindModel(
+        	array(
+        		  'belongsTo' => array('Faculty','Level','User')
+        		  )
+			);
+
+            $programs = $this->Program->find('all', array('conditions' => $conditions));
+
 		}	
 	
-		$this->set('programs', $this->paginate());
+   	
+		$this->set(compact('programs','courses'));
 
 		$this->set('title_for_layout', 'List Programs');        
 		$this->layout = 'main';			
@@ -148,20 +228,82 @@ public $helpers = array('Js');
 
 		$this->Program->Behaviors->load('Containable');
 
+		$this->Program->Course->recursive = 0;
+
+		$options['joins'] = array(
+			array('table' => 'courses_programs',
+				  'alias' => 'CourseProgram',
+				  'type' => 'inner',
+				  'conditions' => array(
+				  		'Course.id = CourseProgram.course_id'
+				  		)
+				  	),			
+			);
+
+		$options['conditions'] = array(
+								'CourseProgram.program_id' => $id
+								);
+
+		$options['order'] = array(
+								'Course.semester ASC'
+								);
+
+		$options['fields'] = array(
+								  'Course.id','Course.name','Course.semester','User.fullname','Course.submitted'
+								  );
+
+    	$this->Program->Course->unbindModel(
+        	array('belongsTo' => array('Faculty','Level'),
+        		  'hasAndBelongsToMany' => array('Program')
+        		  )
+    	);		
+
+		$courses = $this->Program->Course->find('all', $options);
+
 		$this->Program->recursive = 1;
 
-    	$programs = $this->Program->find('first', array(
-			'contain' => array('Course' => array('User'),
-							   'Peo',
-							   'Po',
-							   'Faculty',
-							   'Level'),
-        	'conditions' => array(
-        						'Program.id' => $id
-        						)
-        	));
+		$options2['joins'] = array(
+			array('table' => 'faculties',
+				  'alias' => 'Fac',
+				  'type' => 'inner',
+				  'conditions' => array(
+				  		'Program.faculty_id = Fac.id'
+				  		)
+				  	),
+			array('table' => 'levels',
+				  'alias' => 'Lev',
+				  'type' => 'inner',
+				  'conditions' => array(
+				  		'Program.level_id = Lev.id'
+				  		)
+				  	),		
+			array('table' => 'pos',
+				  'alias' => 'po',
+				  'type' => 'inner',
+				  'conditions' => array(
+				  		'Program.id = po.program_id'
+				  		)
+				  	)			
+			);		
 
+		$options2['conditions'] = array(
+								'Program.id' => $id
+								);
+
+		$options2['fields'] = array(
+								  'Program.id','Program.name_be','Program.name_bm','Faculty.name','Level.name'
+								  );
+
+    	$this->Program->unbindModel(
+        	array(
+        		  'hasAndBelongsToMany' => array('Course')
+        		  )
+    	);
+
+		$programs = $this->Program->find('first', $options2);
+	
 		$this->set('program', $programs);
+		$this->set('courses', $courses);
 
 		$this->set('title_for_layout', 'View Program');        
 		$this->layout = 'main';		

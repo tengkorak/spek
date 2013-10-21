@@ -29,82 +29,85 @@ $user_id = $this->Session->read('Auth.User.id');
 </div>
 
 <div id="mc-component">
+
+
+	<?php
+	if($group_id != 2) {
+	?>
+
 	<div class="mc-clr"></div>
+	<h3> KPP/PP </h3>
 	<table class="adminlist">
 	<thead>
 		<tr>
-			<th><?php echo $this->Paginator->sort('id','Program Code');?></th>
-			<th><?php echo $this->Paginator->sort('name_be','Name (English)');?></th>
-			<th><?php echo $this->Paginator->sort('name_bm','Name (Malay)');?></th>
-
-			<?php
-				if($group_id == 4) {
-			?>
-				<th> Role </th>
-			<?php
-				}
-			?>
+			<th> Program Code </th>
+			<th> Name (English) </th>
+			<th> Name (Malay) </th>
 		</tr>
 	</thead>
 	<tbody>
 	<?php
-	foreach ($programs as $program): ?>
-	<tr>
-		<td><?php echo $this->Html->link($program['Program']['id'], array('action' => 'view', $program['Program']['id'])); ?>&nbsp;</td>		
-		<td><?php echo h( strtoupper( $program['Program']['name_be']) ); ?>&nbsp;</td>
-		<td><?php echo h( strtoupper( $program['Program']['name_bm']) ); ?>&nbsp;</td>
-		<?php
-			if($group_id == 4) {
-		?>		
-		<td>
-			<?php
-				if($program['Program']['user_id'] == $user_id) 
-					echo "KPP/ PP ";
-				if($program['Course']['user_id'] == $user_id) 
-					echo "Resource Person";
-			?>
-		</td>
-			<?php
-				}
-			?>		
-	</tr>
-	<?php endforeach; ?>
+	if(!empty($programs))
+	{
+		foreach ($programs as $program): ?>
+		<tr>
+			<td><?php echo $this->Html->link($program['Program']['id'], array('action' => 'view', $program['Program']['id'])); ?>&nbsp;</td>		
+			<td><?php echo h( strtoupper( $program['Program']['name_be']) ); ?>&nbsp;</td>
+			<td><?php echo h( strtoupper( $program['Program']['name_bm']) ); ?>&nbsp;</td>
+		</tr>
+		<?php 
+		endforeach;
+	}
+	?>
 	</tbody>
 	<tfoot>
 	<tr>
         <td colspan="7">
-        	<div class="mc-page-count">
-			<?php
-			echo $this->Paginator->counter(array(
-			'format' => __('Page {:page} of {:pages}')
-			));
-			?>
-        	</div>
+		</td>
+	</tr>
+	</tfoot>	
+	</table>
 
-        	<del class="mc-pagination-container">
-			<div class="mc-pagination">
-			<div class="page-button">
-				<div class="prev">
-					<span>
-					<?php
-					echo $this->Paginator->prev('< ' . __('prev'), array(), null, array('class' => 'prev disabled'));
-					?>
-					</span>
-				</div>
-			</div>
+	<?php
+	}
+	?>
 
-			<div class="page-button">
-				<div class="prev">
-					<span>
-					<?php
-					echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-					?>
-					</span>
-				</div>
-			</div>
-
-			</div>
-		</del>
+	<div class="mc-clr"></div>
+	<h3> RP </h3>
+	<table class="adminlist">
+	<thead>
+		<tr>
+			<th> Program Code </th>
+			<th> Name (English) </th>
+			<th> Name (Malay) </th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php
+	if(!empty($courses))
+	{	
+		$i = 0;
+		foreach ($courses as $course):
+		?>
+		<tr>
+			<td><?php echo $this->Html->link($course['Program']['id'], array(
+																			'action' => 'view', 
+																			$course['Program']['id']
+																			)); ?>
+																			&nbsp;
+			</td>		
+			<td><?php echo h( strtoupper( $course['Program']['name_be']) ); ?>&nbsp;</td>
+			<td><?php echo h( strtoupper( $course['Program']['name_bm']) ); ?>&nbsp;</td>
+		</tr>
+		<?php 
+		endforeach;
+		$i++;
+	}
+	?>
+	</tbody>
+	<tfoot>
+	<tr>
+        <td colspan="7">
 		</td>
 	</tr>
 	</tfoot>	

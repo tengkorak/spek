@@ -7,7 +7,7 @@ $group_id = $this->Session->read('Auth.User.group_id');
 
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
-			<li class="button special" id="toolbar-back">
+			<li class="button" id="toolbar-back">
 
 			<?php echo $this->Html->link(__('Back'), array(
 													'controller' => 'programs', 
@@ -15,7 +15,29 @@ $group_id = $this->Session->read('Auth.User.group_id');
 													));
 			?>
 			</li>
-			
+
+
+			<?php
+			if($group_id == 1 || $group_id == 4) {
+			?>
+
+			<li class="button" id="toolbar-edit">
+			<a href="/uhek/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
+			Edit
+			</a>
+			</li>
+
+			<li class="button" id="toolbar-delete">
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $program['Program']['id']), null, __('Are you sure you want to delete # %s?', $program['Program']['id'])); ?>
+			</li>
+
+			<?php
+			}
+			?>
+
+			<li class="divider">
+			</li>
+
 			<li class="button special" id="toolbar-popeo">
 			<?php echo $this->Html->link(__('PLO-PEO'), array(
 													'controller' => 'pos', 
@@ -34,32 +56,17 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			?>
 			</li>
 
-			<li class="divider">
-			</li>
-
 			<?php
-			if($group_id == 1 || $group_id == 4) {
-			?>
-
-			<li class="button" id="toolbar-edit">
-			<a href="/uhek/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
-			Edit
-			</a>
-			</li>
-
-			<li class="button" id="toolbar-delete">
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $program['Program']['id']), null, __('Are you sure you want to delete # %s?', $program['Program']['id'])); ?>
-			</li>
-
-			<?php
-			}
-
 			if($group_id == 1) {
 			?>
 
 			<li class="button special" id="toolbar-edit">
-			<a href="/uhek/programs/searchCoor/<?php echo $program['Program']['id'];?>" class="toolbar">
-			Add KPP/ PP
+			<?php echo $this->Html->link(__('Add KPP/PP'), array(
+													'controller' => 'programs', 
+													'action' => 'searchCoor',
+													$program['Program']['id']
+													));
+			?>			
 			</a>
 			</li>
 
@@ -144,9 +151,10 @@ $group_id = $this->Session->read('Auth.User.group_id');
 		if($group_id == 1 || $group_id == 4) {
 		?>
 
-		<td class="actions">
+		<td class="actions" width="10%">
 			<?php
-			  echo $this->Html->link(__('Edit '), array('controller' => 'peos', 'action' => 'edit', $peo['id'] ));				
+			  echo $this->Html->link(__('Edit '), array('controller' => 'peos', 'action' => 'edit', $peo['id'],
+			   '?' => array('program_id'=>$this->params['pass']['0']) ));				
 			  echo $this->Form->postLink(__(': Delete'), array('controller' => 'peos', 'action' => 'delete', $peo['id'],'?' => array('program_id'=>$this->params['pass']['0'])), null, __('Are you sure you want to delete # %s?', $peo['id'])); 
 			?>
 		</td>
@@ -213,7 +221,7 @@ if($group_id == 1 || $group_id == 4) {
 			if($group_id == 1 || $group_id == 4) {
 		?>			
 
-			<td class="actions">
+			<td class="actions" width="10%">
 				<?php
 				  echo $this->Html->link(__('Edit '), array('controller' => 'pos', 'action' => 'edit', $po['id'],
 				  	'?' => array('program_id'=>$this->params['pass']['0'])
@@ -254,21 +262,20 @@ if($group_id == 1 || $group_id == 4) {
 
 <br />
 
-
 	<h3><?php echo __('List of Courses');?></h3>
-	<?php if (!empty($program['Course'])):?>
+	<?php if (!empty($courses)):?>
 	<?php
 		$i = 0;
 		$semester = 0; 
-		foreach ($program['Course'] as $course):
+		foreach ($courses as $course):
 
-		if($semester != 0 && $course['semester'] != $semester) {
+		if($semester != 0 && $course['Course']['semester'] != $semester) {
 			echo "</tbody>";
 			echo "</table>";
 		}
 
-		if($course['semester'] != $semester) {
-		$semester = $course['semester'];
+		if($course['Course']['semester'] != $semester) {
+		$semester = $course['Course']['semester'];
 
 		echo "<h3> Semester " . $semester . "</h3>"; 
 		?>
@@ -276,9 +283,10 @@ if($group_id == 1 || $group_id == 4) {
 		<table class="adminlist">
 		<thead>
 		<tr>
-			<th><?php echo __('Code'); ?></th>
-			<th><?php echo __('Name'); ?></th>
+			<th width="10%"><?php echo __('Code'); ?></th>
+			<th width="50%"><?php echo __('Name'); ?></th>
 			<th><?php echo __('Resource Person'); ?></th>
+			<th width="5%"><?php echo __('Completed'); ?></th>			
 		</tr>
 		</thead>
 		<tbody>
@@ -288,10 +296,10 @@ if($group_id == 1 || $group_id == 4) {
 		?>
 
 		<tr>
-			<td  width="10%"><?php echo $this->Html->link($course['id'], array('controller' => 'courses', 'action' => 'view', $course['id'])); 
+			<td  width="10%"><?php echo $this->Html->link($course['Course']['id'], array('controller' => 'courses', 'action' => 'view', $course['Course']['id'], $program['Program']['id'])); 
 				?>
 			</td>
-			<td><?php echo strtoupper($course['name']);?></td>
+			<td><?php echo strtoupper($course['Course']['name']);?></td>
 
 			<td>
 				<?php 
@@ -301,6 +309,28 @@ if($group_id == 1 || $group_id == 4) {
 					echo '&nbsp';
 				}
 				?>
+			</td>
+			<td>
+				<div class="mc-toolbar" id="toolbar">
+				<ul>
+					<?php
+						if($course['Course']['submitted'] == 0) {
+					?>		
+							<li class="button" id="toolbar-submitted">
+								<a href="#"> NO </a>
+							</li>
+					<?php
+						}
+						else {
+					?>
+							<li class="button special" id="toolbar-submitted">
+								<a href="#"> YES </a>
+							</li>
+					<?php
+						}
+					?>
+				</ul>
+				</div>
 			</td>
 		</tr>
 	<?php endforeach; ?>
