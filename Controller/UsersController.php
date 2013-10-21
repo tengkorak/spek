@@ -10,7 +10,6 @@ class UsersController extends AppController {
 public function beforeFilter() {
     parent::beforeFilter();
     $this->Auth->autoRedirect = false;
-	// $this->Auth->allow('*');
 }
 
 /*
@@ -34,7 +33,8 @@ public function initDB() {
     $this->Acl->allow($group, 'controllers/Courses/index');
     $this->Acl->allow($group, 'controllers/Courses/view');
     $this->Acl->allow($group, 'controllers/Courses/edit');
-    $this->Acl->allow($group, 'controllers/Courses/viewPdf');    
+    $this->Acl->allow($group, 'controllers/Courses/viewPdf'); 
+    $this->Acl->allow($group, 'controllers/Courses/submit');        
     $this->Acl->allow($group, 'controllers/Instructions');
     $this->Acl->allow($group, 'controllers/Outcomes');
     $this->Acl->allow($group, 'controllers/Peos');
