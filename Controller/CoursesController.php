@@ -1,5 +1,5 @@
 <?php
-App::uses('AppController', 'Controller');
+App::uses('AppController', 'Controller','AuthComponent', 'Controller/Component');
 /**
  * Courses Controller
  *
@@ -26,7 +26,6 @@ public $helpers = array('Js');
 		$this->set('title_for_layout', 'List Course');        
 		$this->layout = 'main';	    			
 	}
-
 
 
 	public function searchRp() {
@@ -70,7 +69,7 @@ public $helpers = array('Js');
 			if ($this->Course->save($this->request->data)) {
 				$this->Session->setFlash(__('The RP has been assign succesfully'),'message');
 				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view', $course_id,
+									  'action' => 'view', $course_id
 				));
 			} else {
 				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
@@ -123,7 +122,7 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
+	public function view($id = null, $pid = null) {
 
 		$this->Course->id = $id;
 		
@@ -131,13 +130,19 @@ public $helpers = array('Js');
 			throw new NotFoundException(__('Invalid course'));
 		}
 		
+    	$this->Course->unbindModel(
+        	array(
+        		  'hasAndBelongsToMany' => array('Program')
+        		  )
+    	);		
 		$this->set('course', $this->Course->read(null, $id));
+
+		$this->Course->Program->recursive = -1;
+		$this->set('program', $this->Course->Program->read(null, $pid));
 
 		$nodelist = $this->Course->Content->generateTreeList(
 											 array('Content.course_id'=>$id
 												  ),null,null,'&nbsp;&nbsp;&nbsp;');
-
-		// $categories = $this->Category->generatetreelist(null,null,null,"|-- ");
     
     	$nodelist_array = array();
     
@@ -170,8 +175,6 @@ public $helpers = array('Js');
 		$nodelist = $this->Course->Content->generateTreeList(
 											 array('Content.course_id'=>$id
 												  ),null,null,'&nbsp;&nbsp;&nbsp;');
-
-		// $categories = $this->Category->generatetreelist(null,null,null,"|-- ");
     
     	$nodelist_array = array();
     
@@ -188,6 +191,44 @@ public $helpers = array('Js');
 		$this->render();	    	
 	}
 
+/**
+ * submit method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function submit($id = null, $pid = null) {
+
+		$this->Course->id = $id;
+		$user_id = $this->Auth->user('id');			
+		
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+
+		$this->Course->CourseSubmit->create();
+
+		$data = array();
+		$data['Course']['id'] = $id;
+		$data['Course']['submitted'] = 1;
+		$data['CourseSubmit']['course_id'] = $id;
+		$data['CourseSubmit']['user_id'] = $user_id;
+
+		if( $this->Course->save($data)) {
+
+			$this->Course->CourseSubmit->save($data);
+
+			$this->Session->setFlash(__('The course has been succesfully submitted!'),'message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $id, $pid
+				));			
+		}
+		
+		$this->set('title_for_layout', 'View Course Information');
+		$this->layout = 'main'; 	
+	}
+
 
 /**
  * add method
@@ -196,21 +237,42 @@ public $helpers = array('Js');
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Course->create();
-			if ($this->Course->save($this->request->data)) {
-				$this->Session->setFlash(__('The course has been saved'),'Manage');
+	
+		$this->Course->id = $this->request->data['Course']['id'];
 
-				if( $this->request->data['Course']['program_id'] != '') {
-					$this->redirect(array('controller' => 'programs', 
+		if ($this->Course->exists()) {
+			
+				$this->Course->CoursesProgram->create();
+
+				$data = array();
+				$data['CoursesProgram']['course_id'] = $this->request->data['Course']['id'];
+				$data['CoursesProgram']['program_id'] = $this->request->data['Course']['program_id'];
+
+				if( $this->Course->CoursesProgram->save($data)) {
+					$this->Session->setFlash(__('The course has been added to the program'),'Manage');
+				}
+				
+				$this->redirect(array('controller' => 'programs', 
 									  'action' => 'view',
 									  $this->request->data['Course']['program_id']));
-				}
-				else {
-					$this->redirect(array('controller' => 'courses', 
-									  'action' => 'index'));					
-				}
 			} else {
-				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+
+				$this->Course->create();
+				if ($this->Course->save($this->request->data)) {
+					$this->Session->setFlash(__('The course has been saved'),'Manage');
+
+					if( $this->request->data['Course']['program_id'] != '') {
+						$this->redirect(array('controller' => 'programs', 
+										  'action' => 'view',
+										  $this->request->data['Course']['program_id']));
+					}
+					else {
+						$this->redirect(array('controller' => 'courses', 
+										  'action' => 'index'));					
+					}
+				} else {
+					$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+				}
 			}
 		}
 		$faculties = $this->Course->Faculty->find('list');

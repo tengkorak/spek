@@ -1,5 +1,5 @@
 <?php
-debug($programs);
+// debug($programs);
 ?>
 
 <div id="mc-title">

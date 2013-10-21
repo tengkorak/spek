@@ -43,13 +43,19 @@ li:hover li {
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-back">
-			<?php echo $this->Html->link(__('Back'), array('controller' => 'programs', 'action' => 'view', $course['Course']['program_id'])); ?>						
+			<?php echo $this->Html->link(__('Back'), array('controller' => 'programs', 'action' => 'view', $this->passedArgs[1])); ?>						
 			</li>
+
+			<?php
+
+			if($course['Course']['submitted'] == 0) {
+			?>
+
 			<li class="button" id="toolbar-edit">
 			<?php echo $this->Html->link(__('Edit'), array('controller' => 'courses', 'action' => 'edit', $course['Course']['id'])); ?>		
 			</li>
 			<?php
-				if ($this->Session->read('Auth.User')){
+			if ($this->Session->read('Auth.User')){
 					if($this->Session->read('Auth.User.group_id') == 1)
 					{
 			?>
@@ -59,6 +65,7 @@ li:hover li {
 			<?php
 					}
 				}
+			}
 			?>
 			<li class="divider">
 			</li>			
@@ -86,6 +93,19 @@ li:hover li {
 			<li class="button special" id="toolbar-pdf">
 			<?php echo $this->Html->link(__(' PDF '), array('controller' => 'courses', 'action' => 'viewPdf', $course['Course']['id'])); ?>
 			</li>
+
+			<?php
+			if($course['Course']['submitted'] == 0) {
+			?>
+
+			<li class="button submit" id="toolbar-submit">
+			<?php echo $this->Form->postLink(__('Submit'), array('action' => 'submit', $course['Course']['id'],$this->passedArgs[1]), null, __('Are you sure you want to submit course %s? You will not be able to edit this course after it has been submitted.', $course['Course']['id'])); ?>
+			</li>
+
+			<?php
+			}
+			?>
+
 			<?php
 				if ($this->Session->read('Auth.User')){
 					if($this->Session->read('Auth.User.group_id') == 1 || 
@@ -119,7 +139,7 @@ li:hover li {
 <tr>
 		<td><strong><?php echo __('PROGRAM'); ?></strong></td>
 		<td> :
-			<?php echo h($course['Program']['name_bm']); ?>
+			<?php echo h($program['Program']['name_bm']); ?>
 			&nbsp;
 		</td>
 </tr>
@@ -205,15 +225,24 @@ li:hover li {
 			<br>
 			<span class="comment_actions">
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'synopses', 'action' => 'edit', $synopsis['id']));	
 				  echo '&nbsp';
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'synopses', 'action' => 'delete', $synopsis['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $synopsis['id'])); ?>
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'synopses', 'action' => 'delete', $synopsis['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $synopsis['id'])); 
+				  }
+				  ?>
 			</span>
 		</div>
 	<?php endforeach; ?>
 <?php endif; ?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -224,6 +253,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -238,9 +271,12 @@ li:hover li {
 				  ?>
 				  <span class="comment_actions">
 				  <?php
+				  if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'outcomes', 'action' => 'edit', $outcome['id'] ));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'outcomes', 'action' => 'delete', $outcome['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $outcome['id'])); 
+				  }
 				  ?>
 				  </span>
 		</li>
@@ -255,6 +291,11 @@ li:hover li {
 	?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -264,6 +305,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -277,9 +322,12 @@ li:hover li {
 
 				<span class="comment_actions">
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'instructions', 'action' => 'edit', $instruction['id']));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'instructions', 'action' => 'delete', $instruction['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $instruction['id'])); 
+				}
 				?>
 				</span>
 		</li>
@@ -295,6 +343,11 @@ li:hover li {
 	?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -303,6 +356,10 @@ li:hover li {
 		));?>	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -319,6 +376,8 @@ li:hover li {
 		?>
 			<span class="comment_actions">
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id']));
 
 				  echo '&nbsp';
@@ -331,7 +390,9 @@ li:hover li {
 
  				  echo '&nbsp';
 
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); ?>
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); 
+				}
+				?>
 			</span>
 		</div>
 		<?php
@@ -339,6 +400,11 @@ li:hover li {
 		}
 		?>
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -346,6 +412,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -383,9 +453,14 @@ li:hover li {
 
 				<td>
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				} else {
+					echo "&nbsp;";
+				}
 				?>
 				</td>
 		<?php
@@ -407,9 +482,12 @@ li:hover li {
 
 				<td>
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				}
 				?>
 				</td>
 
@@ -427,6 +505,11 @@ li:hover li {
 	<?php endif; ?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -439,6 +522,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -458,9 +545,12 @@ li:hover li {
 
 				<span class="comment_actions">
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id']));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'textbooks', 'action' => 'delete', $textbook['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $textbook['id'])); 
+				}
 				?>
 				</span>
 		</li>
@@ -476,6 +566,11 @@ li:hover li {
 	?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -488,6 +583,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 <br />
@@ -507,9 +606,12 @@ li:hover li {
 
 				<span class="comment_actions">
 				<?php
+				if($course['Course']['submitted'] == 0) {
+
 				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id']));
 				  echo "&nbsp;";
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'references', 'action' => 'delete', $reference['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $reference['id'])); 
+				}
 				?>
 				</span>
 		</li>
@@ -525,6 +627,11 @@ li:hover li {
 	?>
 
 <br />
+
+<?php
+if($course['Course']['submitted'] == 0) {
+?>
+
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
@@ -537,6 +644,10 @@ li:hover li {
 	</li>
 </ul>
 </div>
+
+<?php
+}
+?>
 
 <div class="mc-clr"></div>
 
