@@ -135,8 +135,9 @@ class SynopsesController extends AppController {
 		$user_id = $this->Auth->user('id');
 
 		if($this->Synopsis->Course->isResourcePerson($cid,$user_id)) {
+
 			if ($this->Synopsis->delete()) {
-				$this->Session->setFlash(__('Synopsis deleted'),'Message');
+				$this->Session->setFlash(__('Synopsis deleted'),'message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view', $cid, $pid
 									  ));		
