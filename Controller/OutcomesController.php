@@ -45,43 +45,49 @@ public $helpers = array('Js');
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
 		if ($this->request->is('post')) {
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Outcome->Course->isResourcePerson($this->request->data['Outcome']['course_id'],$user_id)) {		
 			$this->Outcome->create();
 			if ($this->Outcome->save($this->request->data)) {
 				$this->Session->setFlash(__('The outcome has been saved'),'Message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Outcome']['course_id']));
+									  $this->request->data['Outcome']['course_id'],$pid
+									  ));
 			} else {
 				$this->Session->setFlash(__('The outcome could not be saved. Please, try again.'));
 			}
+		} 
+		else {
+				$this->Session->setFlash(__('Sorry but only RP is authorized to add new outcomes.'),'message');
+
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',
+									  $this->request->data['Outcome']['course_id'],$pid));				
+		}		
+
 		}
 		
 		$pos = $this->Outcome->Po->find('list',array(
-										'joins'=>array(
-												array(
-													'table'=>'courses',
-													'alias'=>'Course',
-													'type'=>'inner',
-													'foreignKey'=>false,
-													'conditions'=>array('Po.program_id = Course.program_id')
-													)),
 										'fields'=>array('id','description'),
-										'conditions'=>array('Course.id'=>$this->params['url']['course_id'])
+										'conditions'=>array('Po.program_id'=> $pid)
 										));
 
 		$instructions = $this->Outcome->Instruction->find('list',
 										array(
 											  'fields'=>array('id','name'),
-											  'conditions'=>array('course_id'=>$this->params['url']['course_id'])
+											  'conditions'=>array('course_id'=>$id)
 											  ));
 
 		$assessments = $this->Outcome->Assessment->find('list',
 										array(
 											  'fields'=>array('id','name'),
 											  'conditions'=>array(
-											  					'course_id'=>$this->params['url']['course_id'],
+											  					'course_id'=>$id,
 											  					'type'=>1
 											  					)
 											  ));
@@ -97,35 +103,43 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
 		$this->Outcome->id = $id;
+
 		if (!$this->Outcome->exists()) {
 			throw new NotFoundException(__('Invalid outcome'));
 		}
+
 		if ($this->request->is('post') || $this->request->is('put')) {
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Outcome->Course->isResourcePerson($this->request->data['Outcome']['course_id'],$user_id)) {		
+
 			if ($this->Outcome->save($this->request->data)) {
 				$this->Session->setFlash(__('The outcome has been saved'),'Message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Outcome']['course_id']));
+									  $this->request->data['Outcome']['course_id'], $pid));
 			} else {
 				$this->Session->setFlash(__('The outcome could not be saved. Please, try again.'));
 			}
-		} else {
+		}
+		else {
+				$this->Session->setFlash(__('Sorry but only RP is authorized to edit outcomes.'),'message');
+
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',
+									  $this->request->data['Outcome']['course_id'],$pid));				
+		}		 
+		}
+		else {
 			$this->request->data = $this->Outcome->read(null, $id);
 		}
 
 		$pos = $this->Outcome->Po->find('list',array(
-										'joins'=>array(
-												array(
-													'table'=>'courses',
-													'alias'=>'Course',
-													'type'=>'inner',
-													'foreignKey'=>false,
-													'conditions'=>array('Po.program_id = Course.program_id')
-													)),
 										'fields'=>array('id','description'),
-										'conditions'=>array('Course.id'=>$this->request->data['Outcome']['course_id'])
+										'conditions'=>array('Po.program_id'=> $pid)
 										));
 
 		$instructions = $this->Outcome->Instruction->find('list',
@@ -155,7 +169,7 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -163,11 +177,28 @@ public $helpers = array('Js');
 		if (!$this->Outcome->exists()) {
 			throw new NotFoundException(__('Invalid outcome'));
 		}
-		if ($this->Outcome->delete()) {
-			$this->Session->setFlash(__('Outcome deleted'),'Message');
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Outcome->Course->isResourcePerson($cid,$user_id)) {
+
+			if ($this->Outcome->delete()) {
+				$this->Session->setFlash(__('Outcome deleted'),'Message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',
+									  $cid, $pid
+									  ));		
+			}
+		}
+		else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete outcomes.'),'message');
+
 			$this->redirect(array('controller' => 'courses', 
 								  'action' => 'view',
-								  $this->params['url']['course_id']));		}
+								  $cid, $pid
+								  ));				
+		}
+
 		$this->Session->setFlash(__('Outcome was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

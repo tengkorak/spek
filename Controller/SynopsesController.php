@@ -43,7 +43,7 @@ class SynopsesController extends AppController {
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
 		if ($this->request->is('post')) {
 
 		$this->Synopsis->Course->recursive = -1;
@@ -57,17 +57,17 @@ class SynopsesController extends AppController {
 				
 					$this->redirect(array('controller' => 'courses', 
 										  'action' => 'view',
-										  $this->request->data['Synopsis']['course_id']));
+										  $this->request->data['Synopsis']['course_id'],$pid));
 				} else {
 					$this->Session->setFlash(__('The synopsis could not be saved. Please, try again.'));
 				}
 			}
 			else {
-					$this->Session->setFlash(__('You are not authorized to add new synopsis for this course'),'message');
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course description.'),'message');
 
 					$this->redirect(array('controller' => 'courses', 
 										  'action' => 'view',
-										  $this->request->data['Synopsis']['course_id']));				
+										  $this->request->data['Synopsis']['course_id'],$pid));				
 			}
 		}
 		$this->set('title_for_layout', 'Add New Sysnopsis');        
@@ -80,7 +80,7 @@ class SynopsesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
 		$this->Synopsis->id = $id;
 
 		if (!$this->Synopsis->exists()) {
@@ -95,18 +95,18 @@ class SynopsesController extends AppController {
 			if ($this->Synopsis->save($this->request->data)) {
 				$this->Session->setFlash(__('The synopsis has been saved'),'message');
 				$this->redirect(array('controller' => 'courses', 
-								  'action' => 'view', $this->request->data['Synopsis']['course_id']
+								  'action' => 'view', $this->request->data['Synopsis']['course_id'], $pid
 								  ));					
 			} else {
 				$this->Session->setFlash(__('The synopsis could not be saved. Please, try again.'));
 			}
 		} 
 		else 	{
-					$this->Session->setFlash(__('You are not authorized to edit synopsis for this course'),'message');
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course description.'),'message');
 
 					$this->redirect(array('controller' => 'courses', 
 										  'action' => 'view',
-										  $this->request->data['Synopsis']['course_id']));				
+										  $this->request->data['Synopsis']['course_id'], $pid));				
 				}
 		}
 		else {
@@ -123,7 +123,7 @@ class SynopsesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -134,19 +134,21 @@ class SynopsesController extends AppController {
 
 		$user_id = $this->Auth->user('id');
 
-		if($this->Synopsis->Course->isResourcePerson($this->params['url']['course_id'],$user_id)) {
+		if($this->Synopsis->Course->isResourcePerson($cid,$user_id)) {
 			if ($this->Synopsis->delete()) {
 				$this->Session->setFlash(__('Synopsis deleted'),'Message');
 				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view', $this->params['url']['course_id']));		
+									  'action' => 'view', $cid, $pid
+									  ));		
 				}
 		}
 		else {
-			$this->Session->setFlash(__('You are not authorized to delete synopsis for this course'),'message');
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete course description.'),'message');
 
 			$this->redirect(array('controller' => 'courses', 
 								  'action' => 'view',
-								  $this->params['url']['course_id']));				
+								  $cid, $pid
+								  ));				
 		}		
 
 		$this->Session->setFlash(__('Synopsis was not deleted'));
