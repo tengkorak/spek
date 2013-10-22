@@ -27,7 +27,7 @@
 
 <?php echo $this->Form->create('Synopsis');?>
 <fieldset class="adminform">
-<input type="hidden" name="data[Synopsis][course_id]" id="SynopsisCourseId" value=<?php echo $this->params['pass']['0'] ?> />		
+<input type="hidden" name="data[Synopsis][course_id]" id="SynopsisCourseId" value=<?php echo $this->params['pass']['0']; ?> />		
 
 <ul class="adminformlist">	
 	<?php

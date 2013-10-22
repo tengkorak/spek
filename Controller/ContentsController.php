@@ -47,17 +47,31 @@ public $name = 'Contents';
  *
  * @return void
  */
-	public function add($id = null) {
+	public function add($id = null, $pid = null) {
+        
         if ($this->request->is('post')) {
-            $this->Content->create();
-            if($this->Content->save($this->request->data)) {
-            	$this->Session->setFlash(__('The content has been saved'),'message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',$this->request->data['Content']['course_id']));
-            }
-            else {
-            	$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
-            }
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Content->Course->isResourcePerson($this->request->data['Content']['course_id'],$user_id)) {
+
+	            $this->Content->create();
+	            if($this->Content->save($this->request->data)) {
+	            	$this->Session->setFlash(__('The content has been saved'),'message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',$this->request->data['Content']['course_id'],$pid));
+	            }
+	            else {
+	            	$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
+	            }
+	        }
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course content.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Content']['course_id'],$pid));				
+			}	        
         } else {
             $parents[0] = "[ No Parent ]";
 
@@ -83,23 +97,9 @@ public $name = 'Contents';
             $this->set(compact('parents'));    
         }
 
-		$this->set('title_for_layout', 'Add Content');        
+		$this->set('title_for_layout', 'Add New Course Content');        
 		$this->layout = 'main';	        
     }
-
-	public function add_old() {
-		if ($this->request->is('post')) {
-			$this->Content->create();
-			if ($this->Content->save($this->request->data)) {
-				$this->Session->setFlash(__('The content has been saved'));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
-			}
-		}
-		$courses = $this->Content->Course->find('list');
-		$this->set(compact('courses'));
-	}
 
 /**
  * edit method
@@ -107,25 +107,38 @@ public $name = 'Contents';
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
 		$this->Content->id = $id;
+
 		if (!$this->Content->exists()) {
 			throw new NotFoundException(__('Invalid content'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 
-			if($this->request->data['Content']['parent_id'] == 'NULL') {
-				$this->request->data['Content']['parent_id'] = 0;
-			}
+			$user_id = $this->Auth->user('id');
 
-			if ($this->Content->save($this->request->data)) {
-				$this->Session->setFlash(__('The content has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Content']['course_id']));
-			} else {
-				$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
+			if($this->Content->Course->isResourcePerson($this->request->data['Content']['course_id'],$user_id)) {
+
+				if($this->request->data['Content']['parent_id'] == 'NULL') {
+					$this->request->data['Content']['parent_id'] = 0;
+				}
+
+				if ($this->Content->save($this->request->data)) {
+					$this->Session->setFlash(__('The content has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Content']['course_id'],$pid));
+				} else {
+					$this->Session->setFlash(__('The content could not be saved. Please, try again.'));
+				}
 			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to edit course content.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Content']['course_id'],$pid));				
+			}			
 		} else {
 			$this->request->data = $this->Content->read(null, $id);
 
@@ -151,8 +164,6 @@ public $name = 'Contents';
 			$this->set(compact('outcomes'));            
             $this->set(compact('parents'));    			
 		}
-//		$courses = $this->Content->Course->find('list');
-//		$this->set(compact('courses'));
 
 		$this->set('title_for_layout', 'Edit Content');        
 		$this->layout = 'main'; 		
@@ -164,7 +175,7 @@ public $name = 'Contents';
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -172,12 +183,28 @@ public $name = 'Contents';
 		if (!$this->Content->exists()) {
 			throw new NotFoundException(__('Invalid content'));
 		}
-		if ($this->Content->delete()) {
-			$this->Session->setFlash(__('Content deleted'),'Message');
-			$this->redirect(array('controller'=> 'courses',
-								  'action' => 'view',
-								  $this->params['url']['course_id']));
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Content->Course->isResourcePerson($cid,$user_id)) {
+
+			if ($this->Content->delete()) {
+				$this->Session->setFlash(__('Content deleted'),'Message');
+				$this->redirect(array('controller'=> 'courses',
+									  'action' => 'view',
+									  $cid,$pid
+									  ));
+			}
 		}
+		else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete course content.'),'message');
+
+			$this->redirect(array('controller' => 'courses', 
+								  'action' => 'view',
+								  $cid, $pid
+								  ));				
+		}		
+
 		$this->Session->setFlash(__('Content was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

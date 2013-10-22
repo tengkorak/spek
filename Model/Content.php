@@ -30,7 +30,8 @@ public $actsAs = array('Tree');
 			'foreignKey' => 'course_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true			
 		),
 	);
 

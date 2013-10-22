@@ -70,7 +70,7 @@ class SynopsesController extends AppController {
 										  $this->request->data['Synopsis']['course_id'],$pid));				
 			}
 		}
-		$this->set('title_for_layout', 'Add New Sysnopsis');        
+		$this->set('title_for_layout', 'Add New Course Description');        
 		$this->layout = 'main';		
 	}
 
@@ -113,7 +113,7 @@ class SynopsesController extends AppController {
 			$this->request->data = $this->Synopsis->read(null, $id);
 		}
 
-		$this->set('title_for_layout', 'Edit Synopsis');        
+		$this->set('title_for_layout', 'Edit Course Description');        
 		$this->layout = 'main';		
 	}
 
