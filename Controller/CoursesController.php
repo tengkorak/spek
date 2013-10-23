@@ -229,6 +229,79 @@ public $helpers = array('Js');
 		$this->layout = 'main'; 	
 	}
 
+/**
+ * check method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function check($id = null, $pid = null) {
+
+		$this->Course->id = $id;
+		$user_id = $this->Auth->user('id');			
+		
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+
+		$this->Course->recursive = -1;
+		
+		$courses = $this->Course->find('all', array(
+												'conditions'=>array('Course.id'=>$id)
+										));
+
+    	$this->Course->CourseSubmit->unbindModel(
+        	array(
+        		  'belongsTo' => array('Course')
+        		  )
+    	);
+
+		$submits = $this->Course->CourseSubmit->find('all', array(
+																 'fields' => array(
+																 				   'CourseSubmit.created',
+																 				   'User.fullname'
+																 				   ),
+																 'conditions'=>array('CourseSubmit.course_id'=>$id)
+																));
+
+		$this->set(compact('courses','submits'));
+		
+		$this->set('title_for_layout', 'View Course Summary');
+		$this->layout = 'main'; 	
+	}
+
+/**
+ * approved method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function approved($id = null, $pid = null) {
+
+		$this->Course->id = $id;
+		$user_id = $this->Auth->user('id');			
+		
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+
+		$data = array();
+		$data['Course']['id'] = $id;
+		$data['Course']['submitted'] = 2;
+
+		if( $this->Course->save($data)) {
+
+			$this->Session->setFlash(__('The course has been succesfully approved!'),'message');
+				$this->redirect(array('controller' => 'programs', 
+									  'action' => 'view', $pid
+				));			
+		}
+		
+		$this->set('title_for_layout', 'View Program Information');
+		$this->layout = 'main'; 	
+	}
 
 /**
  * add method

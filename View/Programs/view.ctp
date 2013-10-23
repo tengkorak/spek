@@ -31,6 +31,10 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $program['Program']['id']), null, __('Are you sure you want to delete # %s?', $program['Program']['id'])); ?>
 			</li>
 
+			<li class="button submit" id="toolbar-submit">
+			<?php echo $this->Form->postLink(__('Submit'), array('action' => 'submit', $program['Program']['id'],$this->passedArgs[0]), null, __('Are you sure you want to submit course %s? You will not be able to edit this course after it has been submitted.', $program['Program']['id'])); ?>
+			</li>
+
 			<?php
 			}
 			?>
@@ -69,6 +73,7 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			?>			
 			</a>
 			</li>
+
 
 			<?php
 			}
@@ -321,7 +326,7 @@ if($group_id == 1 || $group_id == 4) {
 							</li>
 					<?php
 						}
-						else {
+						else if($course['Course']['submitted'] == 1){
 					?>
 							<li class="button special" id="toolbar-submitted">
 								<?php echo $this->Html->link("YES", array('controller' => 'courses', 'action' => 'check', $course['Course']['id'], $program['Program']['id'])); 
@@ -329,6 +334,14 @@ if($group_id == 1 || $group_id == 4) {
 							</li>
 					<?php
 						}
+						else if($course['Course']['submitted'] == 2){
+					?>
+							<li class="button approved" id="toolbar-approved">
+								<?php echo $this->Html->link("CHECKED", '#'); 
+								?>
+							</li>
+					<?php
+						}						
 					?>
 				</ul>
 				</div>
