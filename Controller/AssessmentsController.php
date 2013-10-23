@@ -37,7 +37,7 @@ class AssessmentsController extends AppController {
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
 		if ($this->request->is('post')) {
 			
 			if($this->request->data['Assessment']['type'] == 2) {
@@ -49,10 +49,10 @@ class AssessmentsController extends AppController {
 											 ));
 
 			if($final > 0) {
-				$this->Session->setFlash(__('Error! Course could not have 2 Final Exams'),'Message');
+				$this->Session->setFlash(__('Error! Course could not have 2 Final Exams'),'error');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Assessment']['course_id']));				
+									  $this->request->data['Assessment']['course_id'], $pid));				
 			}
 			else {
 				$this->request->data['Assessment']['name'] = 'Final';
@@ -66,30 +66,42 @@ class AssessmentsController extends AppController {
 											 ));
 
 			if($total['0']['0']['total'] + $this->request->data['Assessment']['percentage'] > 100) {
-				$this->Session->setFlash(__('Total assessment percentage has exceeded 100%.'),'Error');
+				$this->Session->setFlash(__('Total assessment percentage has exceeded 100%.'),'error');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Assessment']['course_id']));				
+									  $this->request->data['Assessment']['course_id'],$pid));				
 			}
 			else {
 			$total = $total['0']['0']['total'] + $this->request->data['Assessment']['percentage'];
 
-			$this->Assessment->create();
+			$user_id = $this->Auth->user('id');
 
-			if ($this->Assessment->save($this->request->data)) {
+			if($this->Assessment->Course->isResourcePerson($this->request->data['Assessment']['course_id'],$user_id)) {
+			
+				$this->Assessment->create();
 
-				if($total < 100) {
-					$this->Session->setFlash(__('Total percentage is less than 100%.'),'Notice');
+				if ($this->Assessment->save($this->request->data)) {
+
+					if($total < 100) {
+						$this->Session->setFlash(__('Reminder: Total percentage is still less than 100%.'),'Notice');
+					}
+					else {
+						$this->Session->setFlash(__('The assessment has been saved'),'Message');					
+					}
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Assessment']['course_id'],$pid));
+				} else {
+					$this->Session->setFlash(__('The assessment could not be saved. Please, try again.'));
 				}
-				else {
-					$this->Session->setFlash(__('The assessment has been saved'),'Message');					
-				}
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Assessment']['course_id']));
-			} else {
-				$this->Session->setFlash(__('The assessment could not be saved. Please, try again.'));
 			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course assessment.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Assessment']['course_id'],$pid));				
+			}			
 			}
 		}
 
@@ -103,8 +115,9 @@ class AssessmentsController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null,  $cid = null, $pid = null) {
 		$this->Assessment->id = $id;
+
 		if (!$this->Assessment->exists()) {
 			throw new NotFoundException(__('Invalid assessment'));
 		}
@@ -123,7 +136,7 @@ class AssessmentsController extends AppController {
 				$this->Session->setFlash(__('Error! Course could not have 2 Final Exams'),'Message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Assessment']['course_id']));				
+									  $this->request->data['Assessment']['course_id'],$pid));				
 			}
 			else {
 				$this->request->data['Assessment']['name'] = 'Final';
@@ -131,18 +144,31 @@ class AssessmentsController extends AppController {
 			
 			}
 
-			if ($this->Assessment->save($this->request->data)) {
-				$this->Session->setFlash(__('The assessment has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Assessment']['course_id']));
-			} else {
-				$this->Session->setFlash(__('The assessment could not be saved. Please, try again.'));
+			$user_id = $this->Auth->user('id');
+
+			if($this->Assessment->Course->isResourcePerson($this->request->data['Assessment']['course_id'],$user_id)) {			
+
+				if ($this->Assessment->save($this->request->data)) {
+					$this->Session->setFlash(__('The assessment has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Assessment']['course_id'],$pid));
+				} else {
+					$this->Session->setFlash(__('The assessment could not be saved. Please, try again.'));
+				}
 			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to edit course assessment.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Assessment']['course_id'],$pid));				
+			}			
 		} else {
 			$this->request->data = $this->Assessment->read(null, $id);
 		}
-		$this->set('title_for_layout', 'Edit Assessment');        
+
+		$this->set('title_for_layout', 'Edit Course Assessment');        
 		$this->layout = 'main';				
 	}
 
@@ -152,7 +178,7 @@ class AssessmentsController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -160,11 +186,26 @@ class AssessmentsController extends AppController {
 		if (!$this->Assessment->exists()) {
 			throw new NotFoundException(__('Invalid assessment'));
 		}
-		if ($this->Assessment->delete()) {
-			$this->Session->setFlash(__('Assessment deleted'),'Message');
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Assessment->Course->isResourcePerson($cid,$user_id)) {
+
+			if ($this->Assessment->delete()) {
+				$this->Session->setFlash(__('Assessment deleted'),'message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $cid, $pid
+									  ));		
+			}
+		} else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete course assessment.'),'message');
+
 			$this->redirect(array('controller' => 'courses', 
-								  'action' => 'view', $this->params['url']['course_id']));		
+								  'action' => 'view',
+								  $cid, $pid
+								  ));				
 		}
+
 		$this->Session->setFlash(__('Assessment was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

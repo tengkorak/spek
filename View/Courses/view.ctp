@@ -227,9 +227,9 @@ li:hover li {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'synopses', 'action' => 'edit', $synopsis['id']));	
+				  echo $this->Html->link(__('Edit'), array('controller' => 'synopses', 'action' => 'edit', $synopsis['id'],$this->params['pass']['0'],$this->params['pass']['1']));	
 				  echo '&nbsp';
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'synopses', 'action' => 'delete', $synopsis['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $synopsis['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'synopses', 'action' => 'delete', $synopsis['id'],$this->params['pass']['0'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $synopsis['id'])); 
 				  }
 				  ?>
 			</span>
@@ -247,8 +247,7 @@ if($course['Course']['submitted'] == 0) {
 <ul>
 	<li class="button" id="toolbar-newpeo">
 		<?php echo $this->Html->link(__('New Synopsis'), array('controller' => 'synopses', 
-				'action' => 'add',
-				'?' => array('course_id'=>$course['Course']['id'])
+				'action' => 'add', $course['Course']['id'],$this->params['pass']['1']
 		));?> 
 	</li>
 </ul>
@@ -273,9 +272,9 @@ if($course['Course']['submitted'] == 0) {
 				  <?php
 				  if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'outcomes', 'action' => 'edit', $outcome['id'] ));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'outcomes', 'action' => 'edit', $outcome['id'],$this->params['pass']['0'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'outcomes', 'action' => 'delete', $outcome['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $outcome['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'outcomes', 'action' => 'delete', $outcome['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $outcome['id'])); 
 				  }
 				  ?>
 				  </span>
@@ -285,7 +284,7 @@ if($course['Course']['submitted'] == 0) {
 	<?php
 	$this->Js->get('#outcome-list');
 	$this->Js->sortable(array(
-	'complete' => '$.post("/uhek/outcomes/reorder", $("#outcome-list").sortable("serialize"))',
+	'complete' => '$.post("/outcomes/reorder", $("#outcome-list").sortable("serialize"))',
 	));				
 	endif; 
 	?>
@@ -299,8 +298,7 @@ if($course['Course']['submitted'] == 0) {
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('New Outcome'), array('controller' => 'outcomes', 'action' => 'add',
-				'?' => array('course_id'=>$course['Course']['id'])
+		<?php echo $this->Html->link(__('New Outcome'), array('controller' => 'outcomes', 'action' => 'add',$course['Course']['id'],$this->params['pass']['1']
 	));?>	
 	</li>
 </ul>
@@ -324,9 +322,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'instructions', 'action' => 'edit', $instruction['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'instructions', 'action' => 'edit', $instruction['id'],$course['Course']['id'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'instructions', 'action' => 'delete', $instruction['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $instruction['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'instructions', 'action' => 'delete', $instruction['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $instruction['id'])); 
 				}
 				?>
 				</span>
@@ -351,9 +349,9 @@ if($course['Course']['submitted'] == 0) {
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('New Method of Instruction'), array('controller' => 'instructions', 'action' => 'add',
-			'?' => array('course_id'=>$course['Course']['id'])
-		));?>	</li>
+		<?php echo $this->Html->link(__('New Method of Instruction'), array('controller' => 'instructions', 'action' => 'add', $course['Course']['id'],$this->params['pass']['1']
+		));?>	
+	</li>
 </ul>
 </div>
 
@@ -378,7 +376,7 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id'],$course['Course']['id'],$this->params['pass']['1']));
 
 				  echo '&nbsp';
 
@@ -390,7 +388,7 @@ if($course['Course']['submitted'] == 0) {
 
  				  echo '&nbsp';
 
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); 
 				}
 				?>
 			</span>
@@ -408,7 +406,9 @@ if($course['Course']['submitted'] == 0) {
 <div class="mc-toolbar" id="toolbar">
 <ul>
 	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('New Content'), array('controller' => 'contents', 'action' => 'add', $course['Course']['id']));?>
+		<?php echo $this->Html->link(__('New Content'), array('controller' => 'contents', 'action' => 'add', $course['Course']['id'],$this->params['pass']['1']
+		));
+		?>
 	</li>
 </ul>
 </div>
@@ -441,8 +441,6 @@ if($course['Course']['submitted'] == 0) {
 
 		echo '<tbody>';
 
-		// echo '<colspan="2"> Continous Assessment (' . $total_continuous . '%)</td></tr>';
-
 		foreach($course['Assessment'] as $assessment):
 			if($assessment['type'] == 1) {
 				echo '<tr class="comment_div"><td>' . $assessment['name'] . 
@@ -455,9 +453,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
 				} else {
 					echo "&nbsp;";
 				}
@@ -484,9 +482,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
 				}
 				?>
 				</td>
@@ -516,7 +514,7 @@ if($course['Course']['submitted'] == 0) {
 		<?php echo $this->Html->link(__('New Assessment'), array(
 			'controller' => 'assessments', 
 			'action' => 'add',
-			'?' => array('course_id'=>$course['Course']['id'])
+			$course['Course']['id'],$this->params['pass']['1']
 			)
 		);?>
 	</li>
@@ -547,9 +545,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id'], $course['Course']['id'], $this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'textbooks', 'action' => 'delete', $textbook['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $textbook['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'textbooks', 'action' => 'delete', $textbook['id'], $course['Course']['id'], $this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $textbook['id'])); 
 				}
 				?>
 				</span>
@@ -577,9 +575,9 @@ if($course['Course']['submitted'] == 0) {
 		<?php echo $this->Html->link(__('New Textbook'), array(
 			'controller' => 'textbooks', 
 			'action' => 'add',
-			'?' => array('course_id'=>$course['Course']['id'])
-			)
-		);?>
+			$course['Course']['id'],$this->params['pass']['1']			
+		));
+		?>
 	</li>
 </ul>
 </div>
@@ -608,9 +606,10 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id'],$course['Course']['id'], $this->params['pass']['1']
+				  	  ));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'references', 'action' => 'delete', $reference['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $reference['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'references', 'action' => 'delete', $reference['id'],$course['Course']['id'], $this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $reference['id'])); 
 				}
 				?>
 				</span>
@@ -638,9 +637,9 @@ if($course['Course']['submitted'] == 0) {
 		<?php echo $this->Html->link(__('New Reference'), array(
 			'controller' => 'references', 
 			'action' => 'add',
-			'?' => array('course_id'=>$course['Course']['id'])
-			)
-		);?>
+			$course['Course']['id'],$this->params['pass']['1']			
+			));
+		?>
 	</li>
 </ul>
 </div>

@@ -26,7 +26,8 @@ class Reference extends AppModel {
 			'foreignKey' => 'course_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true			
 		)
 	);
 }

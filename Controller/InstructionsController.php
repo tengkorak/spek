@@ -44,20 +44,31 @@ public $helpers = array('Js');
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
 		if ($this->request->is('post')) {
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Instruction->Course->isResourcePerson($this->request->data['Instruction']['course_id'],$user_id)) {
+
 			$this->Instruction->create();
 			if ($this->Instruction->save($this->request->data)) {
 				$this->Session->setFlash(__('The instruction has been saved'),'message');
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Instruction']['course_id']));
+									  $this->request->data['Instruction']['course_id'], $pid));
 			} else {
 				$this->Session->setFlash(__('The instruction could not be saved. Please, try again.'));
-			}
+				}
 		}
-		// $courses = $this->Instruction->Course->find('list');
-		// $this->set(compact('courses'));
+		else {
+				$this->Session->setFlash(__('Sorry but only RP is authorized to add new instruction.'),'message');
+
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',
+									  $this->request->data['Instruction']['course_id'],$pid));				
+			}			
+		}
 
 		$this->set('title_for_layout', 'Add New Instruction');        
 		$this->layout = 'main';				
@@ -69,25 +80,38 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
 		$this->Instruction->id = $id;
+
 		if (!$this->Instruction->exists()) {
 			throw new NotFoundException(__('Invalid instruction'));
 		}
+
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Instruction->save($this->request->data)) {
-				$this->Session->setFlash(__('The instruction has been saved'),'Message');
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Instruction->Course->isResourcePerson($this->request->data['Instruction']['course_id'],$user_id)) {
+
+				if ($this->Instruction->save($this->request->data)) {
+					$this->Session->setFlash(__('The instruction has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Instruction']['course_id'],$pid));
+				} else {
+					$this->Session->setFlash(__('The instruction could not be saved. Please, try again.'));
+				}
+			}
+			else {
+				$this->Session->setFlash(__('Sorry but only RP is authorized to add new course description.'),'message');
+
 				$this->redirect(array('controller' => 'courses', 
 									  'action' => 'view',
-									  $this->request->data['Instruction']['course_id']));
-			} else {
-				$this->Session->setFlash(__('The instruction could not be saved. Please, try again.'));
+									  $this->request->data['Instruction']['course_id'], $pid));				
 			}
 		} else {
 			$this->request->data = $this->Instruction->read(null, $id);
 		}
-		// $courses = $this->Instruction->Course->find('list');
-		// $this->set(compact('courses'));
 
 		$this->set('title_for_layout', 'Edit Sysnopsis');        
 		$this->layout = 'main';		
@@ -99,7 +123,7 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -107,11 +131,29 @@ public $helpers = array('Js');
 		if (!$this->Instruction->exists()) {
 			throw new NotFoundException(__('Invalid instruction'));
 		}
-		if ($this->Instruction->delete()) {
-			$this->Session->setFlash(__('Instruction deleted'),'Message');
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Instruction->Course->isResourcePerson($cid,$user_id)) {
+
+			if ($this->Instruction->delete()) {
+				$this->Session->setFlash(__('Instruction deleted'),'Message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view',
+									  $cid, $pid
+									  ));		
+			}
+		}
+		else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete method of instruction.'),'message');
+
 			$this->redirect(array('controller' => 'courses', 
 								  'action' => 'view',
-								  $this->params['url']['course_id']));		}
+								  $cid, $pid
+								  ));				
+		}		
+
+
 		$this->Session->setFlash(__('Instruction was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

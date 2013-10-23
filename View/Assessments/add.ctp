@@ -3,7 +3,10 @@
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
-			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->params['url']['course_id'])); ?>		</li>
+			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->params['pass']['0'],$this->params['pass']['1']
+			)); 
+			?>		
+			</li>
 
 			<li class="button special" id="toolbar-new">
 			<a href="#" onClick="JavaScript:document.forms.AssessmentAddForm.submit()" class="toolbar">
@@ -24,7 +27,8 @@
 
 <?php echo $this->Form->create('Assessment');?>
 <fieldset class="adminform">
-<input type="hidden" name="data[Assessment][course_id]" id="AssessmentCourseId" value=<?php echo $this->params['url']['course_id']?> />
+<input type="hidden" name="data[Assessment][course_id]" id="AssessmentCourseId" value=<?php echo $this->params['pass']['0']; ?> />
+
 <ul class="adminformlist">
 	<?php
 		echo "\n<li>";
@@ -68,29 +72,7 @@
 		echo "<li>";
 		echo $this->Form->input('percentage', array(
 											'label' => 'Total Percentage (%)',
-											'type' => 'select',
-											'options' => array(
-															'5' => '5',
-															'10' => '10',
-															'15' => '15',
-															'20' => '20',
-															'25' => '25',
-															'30' => '30',
-															'35' => '35',
-															'40' => '40',
-															'45' => '45',
-															'50' => '50',
-															'55' => '55',
-															'60' => '60',
-															'65' => '65',
-															'70' => '70',
-															'75' => '75',
-															'80' => '80',
-															'85' => '85',
-															'90' => '90',
-															'95' => '95',
-															'100' => '100'
-															)
+											'div' => 'input assessment percentage'
 											)
 							    );
 		echo "<li>\n";

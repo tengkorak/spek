@@ -3,7 +3,9 @@
 	<div class="mc-toolbar" id="toolbar">
 		<ul>
 			<li class="button" id="toolbar-new">
-			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->data['Course']['id'])); ?>
+			<?php echo $this->Html->link(__('Back'), array('controller' => 'courses', 'action' => 'view', $this->data['Course']['id'],$this->params['pass']['2']
+			)); 
+			?>
 			</li>
 
 			<li class="button special" id="toolbar-new">

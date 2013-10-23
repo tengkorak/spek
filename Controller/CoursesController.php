@@ -229,6 +229,70 @@ public $helpers = array('Js');
 		$this->layout = 'main'; 	
 	}
 
+/**
+ * check method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function check($id = null, $pid = null) {
+
+		$this->Course->id = $id;
+		$user_id = $this->Auth->user('id');			
+		
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+
+    	$this->Course->unbindModel(
+        	array(
+        		  'hasAndBelongsToMany' => array('Program')
+        		  )
+    	);		
+
+		// $this->QuestionType->Behaviors->load('Containable');
+		
+  		//  questionTypes = $this->QuestionType->find('all', array(
+		// 	'contain' => array('Content' => array('Slt',
+		// 										  'Outcome' => array('Po')
+		// 										  )
+		// 					   ),
+		
+		$courses = $this->Course->find('all', array(
+												'conditions'=>array('Course.id'=>$id),
+												'fields'=>array(
+																'count(Content.id)',
+																'count(Outcome.id)'
+																),
+											    'joins' => array(
+											        array(
+											            'table' => 'contents',
+											            'alias' => 'Content',
+											            'type' => 'INNER',
+											            'conditions' => array(
+											                'Course.id = Content.course_id'
+											            	)
+											            ),
+											        array(
+											            'table' => 'outcomes',
+											            'alias' => 'Outcome',
+											            'type' => 'INNER',
+											            'conditions' => array(
+											                'Course.id = Outcome.course_id'
+											            	)											            
+											        	)
+											    )												
+											)
+										);
+
+		$this->set('course', $courses);
+		
+		$this->set('title_for_layout', 'View Course Summary');
+		$this->layout = 'main'; 	
+	}
+
+
 
 /**
  * add method
