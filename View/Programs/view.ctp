@@ -22,7 +22,7 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			?>
 
 			<li class="button" id="toolbar-edit">
-			<a href="/uhek/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
+			<a href="/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
 			Edit
 			</a>
 			</li>
@@ -324,7 +324,8 @@ if($group_id == 1 || $group_id == 4) {
 						else {
 					?>
 							<li class="button special" id="toolbar-submitted">
-								<a href="#"> YES </a>
+								<?php echo $this->Html->link("YES", array('controller' => 'courses', 'action' => 'check', $course['Course']['id'], $program['Program']['id'])); 
+								?>
 							</li>
 					<?php
 						}

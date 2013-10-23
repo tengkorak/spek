@@ -67,6 +67,7 @@ public function initDB() {
     $this->Acl->allow($group, 'controllers/Assessments');
     $this->Acl->allow($group, 'controllers/Contents');
     $this->Acl->allow($group, 'controllers/Courses');
+	// $this->Acl->allow($group, 'controllers/Courses/check');        
     $this->Acl->allow($group, 'controllers/Instructions');
     $this->Acl->allow($group, 'controllers/Outcomes');
     $this->Acl->allow($group, 'controllers/Peos');
