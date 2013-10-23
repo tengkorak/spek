@@ -43,20 +43,33 @@ class TextbooksController extends AppController {
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
 		if ($this->request->is('post')) {
-			$this->Textbook->create();
-			if ($this->Textbook->save($this->request->data)) {
-				$this->Session->setFlash(__('The textbook has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Textbook']['course_id']));				
-			} else {
-				$this->Session->setFlash(__('The textbook could not be saved. Please, try again.'));
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Textbook->Course->isResourcePerson($this->request->data['Textbook']['course_id'],$user_id)) {
+
+				$this->Textbook->create();
+				if ($this->Textbook->save($this->request->data)) {
+					$this->Session->setFlash(__('The textbook has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Textbook']['course_id'],$pid));				
+				} else {
+					$this->Session->setFlash(__('The textbook could not be saved. Please, try again.'));
+				}
+			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course textbook.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Textbook']['course_id'],$pid));				
 			}
 		}
 
-	$this->set('title_for_layout', 'Add Textbook');        
+	$this->set('title_for_layout', 'Add New Textbook');        
 	$this->layout = 'main';
 	}
 
@@ -66,23 +79,39 @@ class TextbooksController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
 		$this->Textbook->id = $id;
+
 		if (!$this->Textbook->exists()) {
 			throw new NotFoundException(__('Invalid textbook'));
 		}
+
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Textbook->save($this->request->data)) {
-				$this->Session->setFlash(__('The textbook has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-								  'action' => 'view', $this->request->data['Textbook']['course_id']
-								  ));					
-			} else {
-				$this->Session->setFlash(__('The textbook could not be saved. Please, try again.'));
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Textbook->Course->isResourcePerson($this->request->data['Textbook']['course_id'],$user_id)) {
+
+				if ($this->Textbook->save($this->request->data)) {
+					$this->Session->setFlash(__('The textbook has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $this->request->data['Textbook']['course_id'], $pid
+									  ));					
+				} else {
+					$this->Session->setFlash(__('The textbook could not be saved. Please, try again.'));
+				}
+			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to edit new course textbook.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Textbook']['course_id'], $pid));				
 			}
 		} else {
 			$this->request->data = $this->Textbook->read(null, $id);
 		}
+
 	$this->set('title_for_layout', 'Edit Textbook');        
 	$this->layout = 'main';		
 	}
@@ -93,7 +122,7 @@ class TextbooksController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -101,11 +130,27 @@ class TextbooksController extends AppController {
 		if (!$this->Textbook->exists()) {
 			throw new NotFoundException(__('Invalid textbook'));
 		}
-		if ($this->Textbook->delete()) {
-			$this->Session->setFlash(__('Textbook deleted'),'Message');
-			$this->redirect(array('controller' => 'courses', 
-								  'action' => 'view', $this->params['url']['course_id']));		
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Textbook->Course->isResourcePerson($cid,$user_id)) {
+
+			if ($this->Textbook->delete()) {
+				$this->Session->setFlash(__('Textbook deleted'),'Message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $cid, $pid
+									  ));		
+			}
 		}
+		else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete course textbook.'),'message');
+
+			$this->redirect(array('controller' => 'courses', 
+								  'action' => 'view',
+								  $cid, $pid
+								  ));				
+		}		
+
 		$this->Session->setFlash(__('Textbook was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

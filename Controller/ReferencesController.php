@@ -43,19 +43,33 @@ class ReferencesController extends AppController {
  *
  * @return void
  */
-	public function add() {
+	public function add($id = null, $pid = null) {
+
 		if ($this->request->is('post')) {
-			$this->Reference->create();
-			if ($this->Reference->save($this->request->data)) {
-				$this->Session->setFlash(__('The reference has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Reference']['course_id']));				
-			} else {
-				$this->Session->setFlash(__('The reference could not be saved. Please, try again.'));
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Reference->Course->isResourcePerson($this->request->data['Reference']['course_id'],$user_id)) {
+
+				$this->Reference->create();
+				if ($this->Reference->save($this->request->data)) {
+					$this->Session->setFlash(__('The reference has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Reference']['course_id'], $pid));				
+				} else {
+					$this->Session->setFlash(__('The reference could not be saved. Please, try again.'));
+				}
 			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to add new course reference.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Reference']['course_id'],$pid));				
+			}			
 		}
-	$this->set('title_for_layout', 'Add Reference');        
+	$this->set('title_for_layout', 'Add New Reference');        
 	$this->layout = 'main';		
 	}
 
@@ -65,25 +79,40 @@ class ReferencesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null, $cid = null, $pid = null) {
+
 		$this->Reference->id = $id;
+		
 		if (!$this->Reference->exists()) {
 			throw new NotFoundException(__('Invalid reference'));
 		}
+		
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Reference->save($this->request->data)) {
-				$this->Session->setFlash(__('The reference has been saved'),'Message');
-				$this->redirect(array('controller' => 'courses', 
-									  'action' => 'view',
-									  $this->request->data['Reference']['course_id']));				
-			} else {
-				$this->Session->setFlash(__('The reference could not be saved. Please, try again.'));
+
+			$user_id = $this->Auth->user('id');
+
+			if($this->Reference->Course->isResourcePerson($this->request->data['Reference']['course_id'],$user_id)) {
+		
+				if ($this->Reference->save($this->request->data)) {
+					$this->Session->setFlash(__('The reference has been saved'),'Message');
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Reference']['course_id'], $pid));				
+				} else {
+					$this->Session->setFlash(__('The reference could not be saved. Please, try again.'));
+				}
 			}
+			else {
+					$this->Session->setFlash(__('Sorry but only RP is authorized to edit course reference.'),'message');
+
+					$this->redirect(array('controller' => 'courses', 
+										  'action' => 'view',
+										  $this->request->data['Reference']['course_id'],$pid));				
+			}			
+
 		} else {
 			$this->request->data = $this->Reference->read(null, $id);
 		}
-//		$courses = $this->Reference->Course->find('list');
-//		$this->set(compact('courses'));
 
 	$this->set('title_for_layout', 'Edit Reference');        
 	$this->layout = 'main';				
@@ -95,19 +124,36 @@ class ReferencesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null, $cid = null, $pid = null) {
+		
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
+
 		$this->Reference->id = $id;
 		if (!$this->Reference->exists()) {
 			throw new NotFoundException(__('Invalid reference'));
 		}
-		if ($this->Reference->delete()) {
-			$this->Session->setFlash(__('Reference deleted'),'Message');
-			$this->redirect(array('controller' => 'courses', 
-								  'action' => 'view', $this->params['url']['course_id']));		
+
+		$user_id = $this->Auth->user('id');
+
+		if($this->Reference->Course->isResourcePerson($cid,$user_id)) {		
+			if ($this->Reference->delete()) {
+				$this->Session->setFlash(__('Reference deleted'),'Message');
+				$this->redirect(array('controller' => 'courses', 
+									  'action' => 'view', $cid, $pid
+									  ));		
+			}
 		}
+		else {
+			$this->Session->setFlash(__('Sorry but only RP is authorized to delete course reference.'),'message');
+
+			$this->redirect(array('controller' => 'courses', 
+								  'action' => 'view',
+								  $cid, $pid
+								  ));				
+		}		
+
 		$this->Session->setFlash(__('Reference was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}

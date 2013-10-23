@@ -26,7 +26,8 @@ class Textbook extends AppModel {
 			'foreignKey' => 'course_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
+			'order' => '',
+			'counterCache' => true			
 		)
 	);
 }
