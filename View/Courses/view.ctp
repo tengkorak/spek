@@ -441,8 +441,6 @@ if($course['Course']['submitted'] == 0) {
 
 		echo '<tbody>';
 
-		// echo '<colspan="2"> Continous Assessment (' . $total_continuous . '%)</td></tr>';
-
 		foreach($course['Assessment'] as $assessment):
 			if($assessment['type'] == 1) {
 				echo '<tr class="comment_div"><td>' . $assessment['name'] . 
@@ -455,9 +453,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
 				} else {
 					echo "&nbsp;";
 				}
@@ -484,9 +482,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'assessments', 'action' => 'delete', $assessment['id'],$course['Course']['id'],$this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $assessment['id'])); 
 				}
 				?>
 				</td>
@@ -547,9 +545,9 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id'], $course['Course']['id'], $this->params['pass']['1']));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'textbooks', 'action' => 'delete', $textbook['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $textbook['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'textbooks', 'action' => 'delete', $textbook['id'], $course['Course']['id'], $this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $textbook['id'])); 
 				}
 				?>
 				</span>
@@ -608,9 +606,10 @@ if($course['Course']['submitted'] == 0) {
 				<?php
 				if($course['Course']['submitted'] == 0) {
 
-				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id']));
+				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id'],$course['Course']['id'], $this->params['pass']['1']
+				  	  ));
 				  echo "&nbsp;";
-				  echo $this->Form->postLink(__('Delete'), array('controller' => 'references', 'action' => 'delete', $reference['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $reference['id'])); 
+				  echo $this->Form->postLink(__('Delete'), array('controller' => 'references', 'action' => 'delete', $reference['id'],$course['Course']['id'], $this->params['pass']['1']), null, __('Are you sure you want to delete # %s?', $reference['id'])); 
 				}
 				?>
 				</span>
