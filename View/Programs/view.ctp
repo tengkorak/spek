@@ -19,19 +19,27 @@ $group_id = $this->Session->read('Auth.User.group_id');
 
 			<?php
 			if($group_id == 1 || $group_id == 4) {
-			?>
 
-			<li class="button" id="toolbar-edit">
-			<a href="/uhek/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
-			Edit
-			</a>
-			</li>
+				if($program['Program']['submitted'] == 0) {
 
-			<li class="button" id="toolbar-delete">
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $program['Program']['id']), null, __('Are you sure you want to delete # %s?', $program['Program']['id'])); ?>
-			</li>
+				?>
+
+				<li class="button" id="toolbar-edit">
+				<a href="/programs/edit/<?php echo $program['Program']['id'];?>" class="toolbar">
+				Edit
+				</a>
+				</li>
+
+				<li class="button" id="toolbar-delete">
+				<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $program['Program']['id']), null, __('Are you sure you want to delete # %s?', $program['Program']['id'])); ?>
+				</li>
+
+				<li class="button submit" id="toolbar-submit">
+				<?php echo $this->Form->postLink(__('Submit'), array('action' => 'submit', $program['Program']['id'],$this->passedArgs[0]), null, __('Are you sure you want to submit course %s? You will not be able to edit this course after it has been submitted.', $program['Program']['id'])); ?>
+				</li>
 
 			<?php
+				}
 			}
 			?>
 
@@ -69,6 +77,7 @@ $group_id = $this->Session->read('Auth.User.group_id');
 			?>			
 			</a>
 			</li>
+
 
 			<?php
 			}
@@ -149,17 +158,19 @@ $group_id = $this->Session->read('Auth.User.group_id');
 
 		<?php
 		if($group_id == 1 || $group_id == 4) {
+			if($program['Program']['submitted'] == 0) {
 		?>
 
-		<td class="actions" width="10%">
-			<?php
-			  echo $this->Html->link(__('Edit '), array('controller' => 'peos', 'action' => 'edit', $peo['id'],
-			   '?' => array('program_id'=>$this->params['pass']['0']) ));				
-			  echo $this->Form->postLink(__(': Delete'), array('controller' => 'peos', 'action' => 'delete', $peo['id'],'?' => array('program_id'=>$this->params['pass']['0'])), null, __('Are you sure you want to delete # %s?', $peo['id'])); 
-			?>
-		</td>
+			<td class="actions" width="10%">
+				<?php
+				  echo $this->Html->link(__('Edit '), array('controller' => 'peos', 'action' => 'edit', $peo['id'],
+				   '?' => array('program_id'=>$this->params['pass']['0']) ));				
+				  echo $this->Form->postLink(__(': Delete'), array('controller' => 'peos', 'action' => 'delete', $peo['id'],'?' => array('program_id'=>$this->params['pass']['0'])), null, __('Are you sure you want to delete # %s?', $peo['id'])); 
+				?>
+			</td>
 
 		<?php
+			}
 		}
 		?>
 
@@ -174,18 +185,20 @@ endforeach;
 
 <?php
 if($group_id == 1 || $group_id == 4) {
+	if($program['Program']['submitted'] == 0) {
 ?>
 
-<div class="mc-toolbar" id="toolbar">
-<ul>
-	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('Add New Program Objectives'), array('controller' => 'peos', 'action' => 'add', '?' => array('program_id'=>$this->params['pass']['0'])));?> 
-	</li>
-</ul>
-</div>
-<div class="mc-clr"></div>
+	<div class="mc-toolbar" id="toolbar">
+	<ul>
+		<li class="button" id="toolbar-newpeo">
+			<?php echo $this->Html->link(__('Add New Program Objectives'), array('controller' => 'peos', 'action' => 'add', '?' => array('program_id'=>$this->params['pass']['0'])));?> 
+		</li>
+	</ul>
+	</div>
+	<div class="mc-clr"></div>
 
 <?php
+	}
 }
 ?>
 
@@ -219,18 +232,20 @@ if($group_id == 1 || $group_id == 4) {
 
 		<?php
 			if($group_id == 1 || $group_id == 4) {
+				if($program['Program']['submitted'] == 0) {				
 		?>			
 
-			<td class="actions" width="10%">
-				<?php
-				  echo $this->Html->link(__('Edit '), array('controller' => 'pos', 'action' => 'edit', $po['id'],
-				  	'?' => array('program_id'=>$this->params['pass']['0'])
-				  	));				
-				  echo $this->Form->postLink(__(' : Delete'), array('controller' => 'pos', 'action' => 'delete', $po['id'],'?' => array('program_id'=>$this->params['pass']['0'])), null, __('Are you sure you want to delete # %s?', $po['id'])); 
-				?>
-			</td>
+				<td class="actions" width="10%">
+					<?php
+					  echo $this->Html->link(__('Edit '), array('controller' => 'pos', 'action' => 'edit', $po['id'],
+					  	'?' => array('program_id'=>$this->params['pass']['0'])
+					  	));				
+					  echo $this->Form->postLink(__(' : Delete'), array('controller' => 'pos', 'action' => 'delete', $po['id'],'?' => array('program_id'=>$this->params['pass']['0'])), null, __('Are you sure you want to delete # %s?', $po['id'])); 
+					?>
+				</td>
 
 		<?php
+			}
 		}
 		?>
 
@@ -244,20 +259,22 @@ if($group_id == 1 || $group_id == 4) {
 
 <?php
 	if($group_id == 1 || $group_id == 4) {
+		if($program['Program']['submitted'] == 0) {
 ?>
 
-<div class="mc-toolbar" id="toolbar">
-<ul>
-	<li class="button" id="toolbar-newpeo">
-		<?php echo $this->Html->link(__('Add New Program Outcome'), array('controller' => 'pos', 'action' => 'add', '?' => array('program_id'=>$this->params['pass']['0'])));?>
-	</li>
-</ul>
-</div>
+		<div class="mc-toolbar" id="toolbar">
+		<ul>
+			<li class="button" id="toolbar-newpeo">
+				<?php echo $this->Html->link(__('Add New Program Outcome'), array('controller' => 'pos', 'action' => 'add', '?' => array('program_id'=>$this->params['pass']['0'])));?>
+			</li>
+		</ul>
+		</div>
 
-<div class="mc-clr"></div>
+		<div class="mc-clr"></div>
 
 <?php
-}
+		}
+	}
 ?>
 
 <br />
@@ -286,7 +303,17 @@ if($group_id == 1 || $group_id == 4) {
 			<th width="10%"><?php echo __('Code'); ?></th>
 			<th width="50%"><?php echo __('Name'); ?></th>
 			<th><?php echo __('Resource Person'); ?></th>
+
+			<?php
+			if( ($group_id == 1 || $group_id == 4) && $program['Program']['submitted'] == 0) {
+			?>
+
 			<th width="5%"><?php echo __('Completed'); ?></th>			
+
+			<?php
+			}
+			?>
+
 		</tr>
 		</thead>
 		<tbody>
@@ -310,28 +337,45 @@ if($group_id == 1 || $group_id == 4) {
 				}
 				?>
 			</td>
+
+			<?php
+			if( ($group_id == 1 || $group_id == 4) && $program['Program']['submitted'] == 0) {			
+			?>
+
 			<td>
 				<div class="mc-toolbar" id="toolbar">
 				<ul>
 					<?php
-						if($course['Course']['submitted'] == 0) {
+						if($course['Course']['submitted'] == 1){
+					?>
+							<li class="button special" id="toolbar-submitted">
+								<?php echo $this->Html->link("YES", array('controller' => 'courses', 'action' => 'check', $course['Course']['id'], $program['Program']['id'])); 
+								?>
+							</li>
+					<?php
+						}
+						else if($course['Course']['submitted'] == 2){
+					?>
+							<li class="button approved" id="toolbar-approved">
+								<?php echo $this->Html->link("CHECKED", '#'); 
+								?>
+							</li>
+					<?php
+						}
+						else {
 					?>		
 							<li class="button" id="toolbar-submitted">
 								<a href="#"> NO </a>
 							</li>
 					<?php
-						}
-						else {
-					?>
-							<li class="button special" id="toolbar-submitted">
-								<a href="#"> YES </a>
-							</li>
-					<?php
-						}
+						}						
 					?>
 				</ul>
 				</div>
 			</td>
+			<?php
+			}
+			?>
 		</tr>
 	<?php endforeach; ?>
 	</tbody>
@@ -339,7 +383,7 @@ if($group_id == 1 || $group_id == 4) {
 <?php endif; ?>
 
 <?php
-	if($group_id == 1 || $group_id == 4) {
+if( ($group_id == 1 || $group_id == 4) && $program['Program']['submitted'] == 0) {			
 ?>
 
 <div class="mc-toolbar" id="toolbar">
