@@ -217,6 +217,43 @@ public $helpers = array('Js');
 		}	
 	}
 
+/**
+ * submit method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function submit($id = null) {
+
+		$this->Program->id = $id;
+		$user_id = $this->Auth->user('id');			
+		
+		if (!$this->Program->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+		}
+
+		$data = array();
+		$data['Program']['id'] = $id;
+		$data['Program']['submitted'] = 1;
+		$data['ProgramSubmit']['program_id'] = $id;
+		$data['ProgramSubmit']['user_id'] = $user_id;
+
+		$this->Program->ProgramSubmit->create();
+
+		if( $this->Program->save($data)) {
+
+			$this->Program->ProgramSubmit->save($data);
+
+			$this->Session->setFlash(__('The program has been succesfully submitted!'),'message');
+				$this->redirect(array('controller' => 'programs', 
+									  'action' => 'view', $id
+				));			
+		}
+		
+		$this->set('title_for_layout', 'View Program Information');
+		$this->layout = 'main'; 	
+	}
 
 /**
  * view method
@@ -291,7 +328,7 @@ public $helpers = array('Js');
 								);
 
 		$options2['fields'] = array(
-								  'Program.id','Program.name_be','Program.name_bm','Faculty.name','Level.name'
+								  'Program.id','Program.name_be','Program.name_bm','Faculty.name','Level.name','Program.submitted'
 								  );
 
     	$this->Program->unbindModel(

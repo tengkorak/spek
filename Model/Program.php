@@ -79,7 +79,20 @@ class Program extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),
+		'ProgramSubmit' => array(
+			'className' => 'ProgramSubmit',
+			'foreignKey' => 'program_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => 'created',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)		
 	);
 
 	public $hasAndBelongsToMany = array(

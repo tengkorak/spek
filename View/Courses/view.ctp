@@ -38,6 +38,10 @@ li:hover li {
 }
 </style>
 
+<?php
+// debug($course);
+?>
+
 <div id="mc-title">
 	<h1> Course Information </h1>												
 	<div class="mc-toolbar" id="toolbar">
@@ -48,7 +52,7 @@ li:hover li {
 
 			<?php
 
-			if($course['Course']['submitted'] == 0) {
+			if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 			?>
 
 			<li class="button" id="toolbar-edit">
@@ -95,7 +99,7 @@ li:hover li {
 			</li>
 
 			<?php
-			if($course['Course']['submitted'] == 0) {
+			if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 			?>
 
 			<li class="button submit" id="toolbar-submit">
@@ -225,7 +229,7 @@ li:hover li {
 			<br>
 			<span class="comment_actions">
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'synopses', 'action' => 'edit', $synopsis['id']));	
 				  echo '&nbsp';
@@ -240,7 +244,7 @@ li:hover li {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -271,7 +275,7 @@ if($course['Course']['submitted'] == 0) {
 				  ?>
 				  <span class="comment_actions">
 				  <?php
-				  if($course['Course']['submitted'] == 0) {
+				  if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'outcomes', 'action' => 'edit', $outcome['id'] ));
 				  echo "&nbsp;";
@@ -293,7 +297,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -322,7 +326,7 @@ if($course['Course']['submitted'] == 0) {
 
 				<span class="comment_actions">
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'instructions', 'action' => 'edit', $instruction['id']));
 				  echo "&nbsp;";
@@ -345,7 +349,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -376,19 +380,21 @@ if($course['Course']['submitted'] == 0) {
 		?>
 			<span class="comment_actions">
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'contents', 'action' => 'edit', $nodelist['Content']['id']));
 
 				  echo '&nbsp';
 
+				/*
  				  echo $this->Html->link("Up", array('controller' => 'contents', 'action'=>'moveup', $nodelist['Content']['id'],1,'?' => array('course_id'=>$course['Course']['id'])),array('style'=>'font-weight:lighter;font-size:9px;color:green;','title'=>'Move Up the Tree'));
 
 				  echo '&nbsp';
 
  				  echo $this->Html->link("Down", array('controller' => 'contents', 'action'=>'movedown', $nodelist['Content']['id'],1,'?' => array('course_id'=>$course['Course']['id'])),array('style'=>'font-weight:lighter;font-size:9px;color:green;','title'=>'Move Down the Tree'));
-
+				
  				  echo '&nbsp';
+				*/
 
 				  echo $this->Form->postLink(__('Delete'), array('controller' => 'contents', 'action' => 'delete', $nodelist['Content']['id'],'?' => array('course_id'=>$course['Course']['id'])), null, __('Are you sure you want to delete # %s?', $nodelist['Content']['id'])); 
 				}
@@ -402,7 +408,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -453,7 +459,7 @@ if($course['Course']['submitted'] == 0) {
 
 				<td>
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
 				  echo "&nbsp;";
@@ -482,7 +488,7 @@ if($course['Course']['submitted'] == 0) {
 
 				<td>
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'assessments', 'action' => 'edit', $assessment['id']));
 				  echo "&nbsp;";
@@ -507,7 +513,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -545,7 +551,7 @@ if($course['Course']['submitted'] == 0) {
 
 				<span class="comment_actions">
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'textbooks', 'action' => 'edit', $textbook['id']));
 				  echo "&nbsp;";
@@ -568,7 +574,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">
@@ -606,7 +612,7 @@ if($course['Course']['submitted'] == 0) {
 
 				<span class="comment_actions">
 				<?php
-				if($course['Course']['submitted'] == 0) {
+				if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 
 				  echo $this->Html->link(__('Edit'), array('controller' => 'references', 'action' => 'edit', $reference['id']));
 				  echo "&nbsp;";
@@ -629,7 +635,7 @@ if($course['Course']['submitted'] == 0) {
 <br />
 
 <?php
-if($course['Course']['submitted'] == 0) {
+if($course['Course']['submitted'] == 0 || $course['Course']['submitted'] == 3) {
 ?>
 
 <div class="mc-toolbar" id="toolbar">

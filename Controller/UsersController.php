@@ -29,12 +29,13 @@ public function initDB() {
     $this->Acl->deny($group, 'controllers');
     $this->Acl->allow($group, 'controllers/Assessments');
     $this->Acl->allow($group, 'controllers/Contents');
-    $this->Acl->allow($group, 'controllers/Courses');
+    //$this->Acl->allow($group, 'controllers/Courses');
     $this->Acl->allow($group, 'controllers/Courses/index');
     $this->Acl->allow($group, 'controllers/Courses/view');
     $this->Acl->allow($group, 'controllers/Courses/edit');
     $this->Acl->allow($group, 'controllers/Courses/viewPdf'); 
     $this->Acl->allow($group, 'controllers/Courses/submit');        
+    $this->Acl->allow($group, 'controllers/Courses/reason');    
     $this->Acl->allow($group, 'controllers/Instructions');
     $this->Acl->allow($group, 'controllers/Outcomes');
     $this->Acl->allow($group, 'controllers/Peos');

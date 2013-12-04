@@ -167,6 +167,19 @@ public $actsAs = array('Tree');
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+		'CourseReject' => array(
+			'className' => 'CourseReject',
+			'foreignKey' => 'course_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => 'created',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
 		)		
 	);
 

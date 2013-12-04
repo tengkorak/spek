@@ -54,39 +54,39 @@ li:hover li {
 <div class="mc-clr"></div>
 <table>
 	<tr>
-		<td colspan="2">
+		<td colspan="3">
 			<h3> History of submission: </h3>
 		</td>
 	</tr>
 
 	<?php
 		foreach($submits as $submit) {
-			echo "<tr><td> Submitted by: </td><td>" . $submit['User']['fullname'] . "</td></tr>";
-			echo "<tr><td> On: </td><td>" . $submit['CourseSubmit']['created'] . "</td></tr>";
-			echo "<tr><td colspan='2'> &nbsp; </td></tr>";
+			echo "<tr><td> Submitted by: </td><td colspan='2'>" . $submit['User']['fullname'] . "</td></tr>";
+			echo "<tr><td> On: </td><td colspan='2'>" . $submit['CourseSubmit']['created'] . "</td></tr>";
+			echo "<tr><td colspan='3'> &nbsp; </td></tr>";
 		}
 	?>
 
 	<tr>
-		<td colspan="2">
+		<td colspan="3">
 			<h3> Summary: </h3>
 		</td>
 	</tr>	
 
 	<?php
 		foreach($courses as $course) {
-			echo "<tr><td> Course Descriptions </td><td>: " . $course['Course']['synopsis_count'] . "</td></tr>";
-			echo "<tr><td> Course Outcomes </td><td>: " . $course['Course']['outcome_count'] . "</td></tr>";
-			echo "<tr><td> Course Instructions </td><td>: " . $course['Course']['instruction_count'] . "</td></tr>";
-			echo "<tr><td> Course Contents </td><td>: " . $course['Course']['content_count'] . "</td></tr>";
-			echo "<tr><td> Assessments </td><td>: " . $course['Course']['assessment_count'] . "</td></tr>";
-			echo "<tr><td> Textbooks </td><td>: " . $course['Course']['textbook_count'] . "</td></tr>";
-			echo "<tr><td> References </td><td>: " . $course['Course']['reference_count'] . "</td></tr>";
+			echo "<tr><td> Course Descriptions </td><td colspan='2'>: " . $course['Course']['synopsis_count'] . "</td></tr>";
+			echo "<tr><td> Course Outcomes </td><td colspan='2'>: " . $course['Course']['outcome_count'] . "</td></tr>";
+			echo "<tr><td> Course Instructions </td><td colspan='2'>: " . $course['Course']['instruction_count'] . "</td></tr>";
+			echo "<tr><td> Course Contents </td><td colspan='2'>: " . $course['Course']['content_count'] . "</td></tr>";
+			echo "<tr><td> Assessments </td><td colspan='2'>: " . $course['Course']['assessment_count'] . "</td></tr>";
+			echo "<tr><td> Textbooks </td><td colspan='2'>: " . $course['Course']['textbook_count'] . "</td></tr>";
+			echo "<tr><td> References </td><td colspan='2'>: " . $course['Course']['reference_count'] . "</td></tr>";
 		}
 	?>
 
-<tr><td colspan="2"> &nbsp; </td></tr>
-<tr><td colspan="2"> &nbsp; </td></tr>
+<tr><td colspan="3"> &nbsp; </td></tr>
+<tr><td colspan="3"> &nbsp; </td></tr>
 
 <tr>
 	<td>
@@ -104,7 +104,20 @@ li:hover li {
 			<?php echo $this->Html->link(__('Approve'), array('controller' => 'courses', 'action' => 'approved', $course['Course']['id'],$this->params['pass']['1'])); ?>						
 			</li>
 		</ul>
-	</div>	
+	</div>
+
+	&nbsp; or 
+
+	</td>
+	<td>
+
+	<div class="mc-toolbar" id="toolbar">
+		<ul>
+			<li class="button submit" id="toolbar-back">
+			<?php echo $this->Html->link(__('Reject'), array('controller' => 'courses', 'action' => 'reject', $course['Course']['id'],$this->params['pass']['1'])); ?>						
+			</li>
+		</ul>
+	</div>
 
 	</td>
 </tr>

@@ -122,6 +122,7 @@ public $helpers = array('Js');
  * @param string $id
  * @return void
  */
+
 	public function view($id = null, $pid = null) {
 
 		$this->Course->id = $id;
@@ -135,7 +136,16 @@ public $helpers = array('Js');
         		  'hasAndBelongsToMany' => array('Program')
         		  )
     	);		
-		$this->set('course', $this->Course->read(null, $id));
+
+    	$courses = $this->Course->read(null, $id);
+
+    	if($courses['Course']['submitted'] == 3) {
+			$this->Session->setFlash(__('Your course submission has been disapproved. 
+										Please click <a href="/courses/reason/' . $id . '/' . $pid .'"> here </a> to
+										see the reason'),'Error');
+    	}
+
+		$this->set('course', $courses);
 
 		$this->Course->Program->recursive = -1;
 		$this->set('program', $this->Course->Program->read(null, $pid));
@@ -229,6 +239,77 @@ public $helpers = array('Js');
 		$this->layout = 'main'; 	
 	}
 
+/**
+ * reason method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function reason($id = null, $pid = null) {
+
+    	$this->Course->CourseReject->unbindModel(
+        	array(
+        		  'belongsTo' => array('Course')
+        		  )
+    	);
+
+		$rejects = $this->Course->CourseReject->find('all', array(
+																 'fields' => array(
+																 				   'CourseReject.created',
+																 				   'CourseReject.reason',
+																 				   'User.fullname'
+																 				   ),
+																 'conditions'=>array('CourseReject.course_id'=>$id)
+																));
+
+		$this->set('rejects', $rejects);
+		
+		$this->set('title_for_layout', 'View Course Disapproval Information');
+		$this->layout = 'main'; 	
+	}
+
+/**
+ * reject method
+ *
+ * @param string $id
+ * @return void
+ */
+
+	public function reject($id = null, $pid = null) {
+
+		if ($this->request->is('post')) {
+			
+			$this->Course->id = $id;
+			$user_id = $this->Auth->user('id');		
+
+			if (!$this->Course->exists()) {
+				throw new NotFoundException(__('Invalid course'));
+			}
+
+			$this->Course->CourseReject->create();
+
+			$data = array();
+			$data['Course']['id'] = $id;
+			$data['Course']['submitted'] = 3;
+			$data['CourseReject']['course_id'] = $id;
+			$data['CourseReject']['user_id'] = $user_id;	
+			$data['CourseReject']['reason'] = $this->request->data['CourseReject']['reason'];			
+
+			if( $this->Course->save($data)) {
+
+				$this->Course->CourseReject->save($data);
+
+				$this->Session->setFlash(__('The course has been disapproved'),'message');
+					$this->redirect(array('controller' => 'programs', 
+										  'action' => 'view', $pid
+					));			
+			}								
+		}
+		
+		$this->set('title_for_layout', 'Reason to reject course submission');
+		$this->layout = 'main'; 	
+	}
 /**
  * check method
  *
